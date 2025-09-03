@@ -194,6 +194,37 @@
     </div>
 
     <script>
+        // Save checkbox states to localStorage
+        function saveCheckboxStates() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const states = {};
+            checkboxes.forEach(cb => {
+                states[cb.id] = cb.checked;
+            });
+            localStorage.setItem('finalsRandomizerStates', JSON.stringify(states));
+        }
+        
+        // Load checkbox states from localStorage
+        function loadCheckboxStates() {
+            const saved = localStorage.getItem('finalsRandomizerStates');
+            if (saved) {
+                const states = JSON.parse(saved);
+                Object.keys(states).forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.checked = states[id];
+                    }
+                });
+            }
+        }
+        
+        // Auto-save when checkboxes change
+        function setupAutoSave() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', saveCheckboxStates);
+            });
+        }
         let gameData = [];
 
         // Load data from data.json
@@ -270,6 +301,10 @@
 
                 grid.appendChild(buildDiv);
             });
+            setTimeout(() => {
+                loadCheckboxStates();
+                setupAutoSave();
+            }, 100);
         }
 
         function createEquipmentToggle(id, name, defaultChecked) {
@@ -402,11 +437,13 @@
         function selectAll() {
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(cb => cb.checked = true);
+            saveCheckboxStates();
         }
 
         function deselectAll() {
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(cb => cb.checked = false);
+            saveCheckboxStates();
         }
 
         // Initialize when page loads
