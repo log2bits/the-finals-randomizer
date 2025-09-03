@@ -1,0 +1,1038 @@
+[
+  {
+    "build": {
+      "id": "LI",
+      "name": "Light",
+      "category": "build"
+    },
+    "specializations": [
+      {
+        "id": "CD",
+        "name": "Cloaking Device",
+        "category": "specialization",
+        "value": 0
+      },
+      {
+        "id": "ED",
+        "name": "Evasive Dash",
+        "category": "specialization",
+        "value": 0
+      },
+      {
+        "id": "GH",
+        "name": "Grappling Hook",
+        "category": "specialization",
+        "value": 0
+      }
+    ],
+    "gadgets": [
+      {
+        "id": "BC",
+        "name": "Breach Charge",
+        "category": "gadget",
+        "value": 600
+      },
+      {
+        "id": "FB",
+        "name": "Flashbang",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "FG",
+        "name": "Frag Grenade",
+        "category": "gadget",
+        "value": 200
+      },
+      {
+        "id": "GG",
+        "name": "Gas Grenade",
+        "category": "gadget",
+        "value": 400
+      },
+      {
+        "id": "GW",
+        "name": "Gateway",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "GE",
+        "name": "Glitch Grenade",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "GO",
+        "name": "Goo Grenade",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "GV",
+        "name": "Gravity Vortex",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "HP",
+        "name": "H+ Infuser",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "PG",
+        "name": "Pyro Grenade",
+        "category": "gadget",
+        "value": 600
+      },
+      {
+        "id": "SM",
+        "name": "Smoke Grenade",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "SN",
+        "name": "Sonar Grenade",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "SG",
+        "name": "Nullifier",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "TB",
+        "name": "Thermal Bore",
+        "category": "gadget",
+        "value": 600
+      },
+      {
+        "id": "TV",
+        "name": "Thermal Vision",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "TD",
+        "name": "Tracking Dart",
+        "category": "gadget",
+        "value": 600
+      },
+      {
+        "id": "VB",
+        "name": "Vanishing Bomb",
+        "category": "gadget",
+        "value": 0
+      }
+    ],
+    "weapons": [
+      {
+        "id": "93",
+        "name": "93R",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          }
+        ],
+        "value": 800
+      },
+      {
+        "id": "AR",
+        "name": "ARN-220",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 400
+      },
+      {
+        "id": "DG",
+        "name": "Dagger",
+        "category": "weapon",
+        "sights": [],
+        "value": 1000
+      },
+      {
+        "id": "LH",
+        "name": "LH1",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "R",
+            "name": "Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 400
+      },
+      {
+        "id": "11",
+        "name": "M11",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          }
+        ],
+        "value": 200
+      },
+      {
+        "id": "26",
+        "name": "M26 Matter",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 800
+      },
+      {
+        "id": "RB",
+        "name": "Recurve Bow",
+        "category": "weapon",
+        "sights": [],
+        "value": 800
+      },
+      {
+        "id": "SH",
+        "name": "SH1900",
+        "category": "weapon",
+        "sights": [],
+        "value": 400
+      },
+      {
+        "id": "SR",
+        "name": "SR-84",
+        "category": "weapon",
+        "sights": [],
+        "value": 800
+      },
+      {
+        "id": "SW",
+        "name": "Sword",
+        "category": "weapon",
+        "sights": [],
+        "value": 600
+      },
+      {
+        "id": "TK",
+        "name": "Throwing Knives",
+        "category": "weapon",
+        "sights": [],
+        "value": 400
+      },
+      {
+        "id": "V9",
+        "name": "V9S",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          }
+        ],
+        "value": 400
+      },
+      {
+        "id": "XP",
+        "name": "XP-54",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "R",
+            "name": "Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 200
+      }
+    ]
+  },
+  {
+    "build": {
+      "id": "MD",
+      "name": "Medium",
+      "category": "build"
+    },
+    "specializations": [
+      {
+        "id": "DM",
+        "name": "Dematerializer",
+        "category": "specialization",
+        "value": 400
+      },
+      {
+        "id": "GT",
+        "name": "Guardian Turret",
+        "category": "specialization",
+        "value": 200
+      },
+      {
+        "id": "HB",
+        "name": "Healing Beam",
+        "category": "specialization",
+        "value": 0
+      }
+    ],
+    "gadgets": [
+      {
+        "id": "AP",
+        "name": "APS Turret",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "BR",
+        "name": "Breach Drill",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "DR",
+        "name": "Data Reshaper",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "DF",
+        "name": "Defibrillator",
+        "category": "gadget",
+        "value": 400
+      },
+      {
+        "id": "EM",
+        "name": "Explosive Mine",
+        "category": "gadget",
+        "value": 400
+      },
+      {
+        "id": "FB",
+        "name": "Flashbang",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "FG",
+        "name": "Frag Grenade",
+        "category": "gadget",
+        "value": 200
+      },
+      {
+        "id": "GG",
+        "name": "Gas Grenade",
+        "category": "gadget",
+        "value": 400
+      },
+      {
+        "id": "GM",
+        "name": "Gas Mine",
+        "category": "gadget",
+        "value": 400
+      },
+      {
+        "id": "GP",
+        "name": "Glitch Trap",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "GO",
+        "name": "Goo Grenade",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "JP",
+        "name": "Jump Pad",
+        "category": "gadget",
+        "value": 400
+      },
+      {
+        "id": "MO",
+        "name": "Motion Sensor",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "PG",
+        "name": "Pyro Grenade",
+        "category": "gadget",
+        "value": 600
+      },
+      {
+        "id": "SM",
+        "name": "Smoke Grenade",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "ZL",
+        "name": "Zipline",
+        "category": "gadget",
+        "value": 0
+      }
+    ],
+    "weapons": [
+      {
+        "id": "AK",
+        "name": "AKM",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 200
+      },
+      {
+        "id": "CB",
+        "name": "CB-01 Repeater",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "G",
+            "name": "Ghost Ring",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          },
+          {
+            "id": "R",
+            "name": "Reflector",
+            "category": "sight"
+          }
+        ],
+        "value": 600
+      },
+      {
+        "id": "12",
+        "name": "Cerberus 12GA",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          }
+        ],
+        "value": 200
+      },
+      {
+        "id": "CL",
+        "name": "CL-40",
+        "category": "weapon",
+        "sights": [],
+        "value": 1000
+      },
+      {
+        "id": "DB",
+        "name": "Dual Blades",
+        "category": "weapon",
+        "sights": [],
+        "value": 1000
+      },
+      {
+        "id": "FM",
+        "name": "FAMAS",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "R",
+            "name": "Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 200
+      },
+      {
+        "id": "FC",
+        "name": "FCAR",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 200
+      },
+      {
+        "id": "87",
+        "name": "Model 1887",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 800
+      },
+      {
+        "id": "PI",
+        "name": "Pike-556",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "S",
+            "name": "Scout",
+            "category": "sight"
+          }
+        ],
+        "value": 600
+      },
+      {
+        "id": "R3",
+        "name": "R .357",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          }
+        ],
+        "value": 600
+      },
+      {
+        "id": "RS",
+        "name": "Riot Shield",
+        "category": "weapon",
+        "sights": [],
+        "value": 1000
+      }
+    ]
+  },
+  {
+    "build": {
+      "id": "HV",
+      "name": "Heavy",
+      "category": "build"
+    },
+    "specializations": [
+      {
+        "id": "CS",
+        "name": "Charge 'N' Slam",
+        "category": "specialization",
+        "value": 400
+      },
+      {
+        "id": "GN",
+        "name": "Goo Gun",
+        "category": "specialization",
+        "value": 0
+      },
+      {
+        "id": "MS",
+        "name": "Mesh Shield",
+        "category": "specialization",
+        "value": 0
+      },
+      {
+        "id": "WC",
+        "name": "Winch Claw",
+        "category": "specialization",
+        "value": 200
+      }
+    ],
+    "gadgets": [
+      {
+        "id": "GC",
+        "name": "Anti-Gravity Cube",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "BD",
+        "name": "Barricade",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "C4",
+        "name": "C4",
+        "category": "gadget",
+        "value": 600
+      },
+      {
+        "id": "DS",
+        "name": "Dome Shield",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "EM",
+        "name": "Explosive Mine",
+        "category": "gadget",
+        "value": 400
+      },
+      {
+        "id": "FB",
+        "name": "Flashbang",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "FG",
+        "name": "Frag Grenade",
+        "category": "gadget",
+        "value": 200
+      },
+      {
+        "id": "GG",
+        "name": "Gas Grenade",
+        "category": "gadget",
+        "value": 400
+      },
+      {
+        "id": "GO",
+        "name": "Goo Grenade",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "HE",
+        "name": "Healing Emitter",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "LL",
+        "name": "Lockbolt",
+        "category": "gadget",
+        "value": 600
+      },
+      {
+        "id": "MO",
+        "name": "Motion Sensor",
+        "category": "gadget",
+        "value": 0
+      },
+      {
+        "id": "PG",
+        "name": "Pyro Grenade",
+        "category": "gadget",
+        "value": 600
+      },
+      {
+        "id": "PM",
+        "name": "Pyro Mine",
+        "category": "gadget",
+        "value": 600
+      },
+      {
+        "id": "RP",
+        "name": "RPG-7",
+        "category": "gadget",
+        "value": 200
+      },
+      {
+        "id": "SM",
+        "name": "Smoke Grenade",
+        "category": "gadget",
+        "value": 0
+      }
+    ],
+    "weapons": [
+      {
+        "id": "BO",
+        "name": ".50 Akimbo",
+        "category": "weapon",
+        "sights": [],
+        "value": 600
+      },
+      {
+        "id": "FT",
+        "name": "Flamethrower",
+        "category": "weapon",
+        "sights": [],
+        "value": 600
+      },
+      {
+        "id": "KS",
+        "name": "KS-23",
+        "category": "weapon",
+        "sights": [],
+        "value": 1000
+      },
+      {
+        "id": "LG",
+        "name": "Lewis Gun",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 400
+      },
+      {
+        "id": "MG",
+        "name": "M134 Minigun",
+        "category": "weapon",
+        "sights": [],
+        "value": 400
+      },
+      {
+        "id": "60",
+        "name": "M60",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 800
+      },
+      {
+        "id": "32",
+        "name": "MGL32",
+        "category": "weapon",
+        "sights": [],
+        "value": 1000
+      },
+      {
+        "id": "SA",
+        "name": "SA1216",
+        "category": "weapon",
+        "sights": [],
+        "value": 600
+      },
+      {
+        "id": "SK",
+        "name": "ShAK-50",
+        "category": "weapon",
+        "sights": [
+          {
+            "id": "I",
+            "name": "Iron Sights",
+            "category": "sight"
+          },
+          {
+            "id": "C",
+            "name": "Compact Reflector",
+            "category": "sight"
+          },
+          {
+            "id": "H",
+            "name": "Holographic",
+            "category": "sight"
+          },
+          {
+            "id": "A",
+            "name": "Adder Reflex",
+            "category": "sight"
+          },
+          {
+            "id": "L",
+            "name": "Looking Glass",
+            "category": "sight"
+          }
+        ],
+        "value": 400
+      },
+      {
+        "id": "SL",
+        "name": "Sledgehammer",
+        "category": "weapon",
+        "sights": [],
+        "value": 800
+      },
+      {
+        "id": "SP",
+        "name": "Spear",
+        "category": "weapon",
+        "sights": [],
+        "value": 1000
+      }
+    ]
+  }
+]
