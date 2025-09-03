@@ -4,220 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Finals Loadout Randomizer</title>
-        <style>
-        :root {
-            --lt-color-gray-100: #f8f9fc;
-            --lt-color-gray-200: #f1f3f9;
-            --lt-color-gray-300: #dee3ed;
-            --lt-color-gray-400: #c2c9d6;
-            --lt-color-gray-500: #8f96a3;
-            --lt-color-gray-600: #5e636e;
-            --lt-color-gray-700: #2f3237;
-            --lt-color-gray-800: #1d1e20;
-            --lt-color-gray-900: #111213;
-            --lt-color-white: #fff;
-            --lt-color-black: #111213;
-            --lt-color-transparent: rgba(255, 255, 255, 0);
-            --lt-color-background-light: var(--lt-color-gray-100);
-            --lt-color-background-default: var(--lt-color-gray-200);
-            --lt-color-background-dark: var(--lt-color-gray-300);
-            --lt-color-border-light: var(--lt-color-gray-200);
-            --lt-color-border-default: var(--lt-color-gray-300);
-            --lt-color-border-dark: var(--lt-color-gray-400);
-            --lt-color-text-very-light: var(--lt-color-gray-500);
-            --lt-color-text-light: var(--lt-color-gray-600);
-            --lt-color-text-default: var(--lt-color-gray-700);
-            --lt-color-text-dark: var(--lt-color-gray-800);
-            --lt-shadowDefault: 0 2px 6px -1px rgba(0, 0, 0, 0.16), 0 1px 4px -1px rgba(0, 0, 0, 0.04);
-            --lt-shadowActive: 0 0 8px -2px rgba(0, 0, 0, 0.1), 0 6px 20px -3px rgba(0, 0, 0, 0.2);
-            
-            color-scheme: dark;
-            --lt-color-white: #111213;
-            --lt-color-black: #fff;
-            --lt-color-transparent: rgba(17, 18, 19, 0);
-            --lt-color-background-light: var(--lt-color-gray-800);
-            --lt-color-background-default: var(--lt-color-gray-700);
-            --lt-color-background-dark: var(--lt-color-gray-600);
-            --lt-color-border-light: var(--lt-color-gray-800);
-            --lt-color-border-default: var(--lt-color-gray-700);
-            --lt-color-border-dark: var(--lt-color-gray-600);
-            --lt-color-text-very-light: var(--lt-color-gray-400);
-            --lt-color-text-light: var(--lt-color-gray-300);
-            --lt-color-text-default: var(--lt-color-gray-200);
-            --lt-color-text-dark: var(--lt-color-gray-100);
-            --lt-color-overlay: var(--lt-color-gray-700);
-            --lt-color-overlay-default: var(--lt-color-gray-700);
-            --lt-color-overlay-dark: var(--lt-color-gray-800);
-            --lt-color-overlay-transparent: rgba(0, 0, 0, 0.6);
-            --lt-shadow-website-overlay: 0 0 0 1px var(--lt-color-gray-600);
-            --lt-shadowDefault: 0 0 0 1px var(--lt-color-gray-700);
-            --lt-shadowActive: 0 0 0 1px var(--lt-color-gray-600);
-        }
-
+    <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        body {
-            background: var(--lt-color-background-light);
-            color: var(--lt-color-text-dark);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+        html, body {
+            background: #d21f3c;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 24px;
+            padding: 20px;
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 32px;
-            color: #ff6b35;
+            margin-bottom: 30px;
+            color: #ffffff;
             text-transform: uppercase;
-            letter-spacing: 2px;
             font-size: 2.5rem;
-            font-weight: 700;
         }
 
-        .randomizer-section {
-            background: var(--lt-color-background-default);
-            border: 1px solid var(--lt-color-border-default);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: var(--lt-shadowDefault);
+        .section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
 
         .controls {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .btn {
-            background: #ff6b35;
-            color: #ffffff;
+            background: #ffffff;
+            color: white;
             border: none;
             padding: 12px 24px;
             font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
             cursor: pointer;
-            border-radius: 8px;
-            margin: 0 8px;
-            transition: all 0.2s ease;
-            box-shadow: var(--lt-shadowDefault);
+            border-radius: 5px;
+            margin: 0 10px;
+            text-transform: uppercase;
+            font-weight: bold;
         }
 
         .btn:hover {
             background: #e55a2b;
-            box-shadow: var(--lt-shadowActive);
-            transform: translateY(-1px);
         }
 
         .result {
-            background: var(--lt-color-background-dark);
-            border: 2px solid #ff6b35;
-            border-radius: 12px;
+            background: #222;
+            border: 2px solid #ffffff;
+            border-radius: 10px;
             padding: 20px;
-            margin: 16px 0;
-            box-shadow: var(--lt-shadowDefault);
+            margin: 15px 0;
         }
 
         .result h3 {
-            color: #ff6b35;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
         }
 
-        .loadout-url {
-            background: var(--lt-color-background-light);
-            border: 1px solid var(--lt-color-border-default);
-            border-radius: 8px;
-            padding: 12px;
-            margin: 12px 0;
+        .url-box {
+            background: #111;
+            border: 1px solid #444;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
             word-break: break-all;
-            color: var(--lt-color-text-light);
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-family: monospace;
         }
 
         .equipment-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
 
-        .build-section {
-            background: var(--lt-color-background-default);
-            border: 1px solid var(--lt-color-border-default);
-            border-radius: 12px;
+        .build-box {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
             padding: 20px;
-            box-shadow: var(--lt-shadowDefault);
         }
 
         .build-title {
-            color: #ff6b35;
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 16px;
+            color: #ffffff;
             text-align: center;
-            font-size: 1.4rem;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--lt-color-border-dark);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
         }
 
         .category {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .category-title {
-            color: var(--lt-color-text-default);
-            text-transform: uppercase;
+            color: #ccc;
             font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid var(--lt-color-border-default);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
         }
 
-        .equipment-item {
+        .item {
             display: flex;
             align-items: center;
-            margin-bottom: 8px;
-            padding: 8px 12px;
-            background: var(--lt-color-background-light);
-            border: 1px solid var(--lt-color-border-light);
-            border-radius: 8px;
-            transition: all 0.2s ease;
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            background: #111;
+            border-radius: 5px;
         }
 
-        .equipment-item:hover {
-            background: var(--lt-color-background-dark);
-            border-color: var(--lt-color-border-dark);
+        .item:hover {
+            background: #222;
         }
 
-        .equipment-item input[type="checkbox"] {
-            margin-right: 12px;
+        .item input {
+            margin-right: 10px;
             transform: scale(1.2);
-            accent-color: #ff6b35;
+            accent-color: white;
         }
 
-        .equipment-item label {
+        .item label {
             cursor: pointer;
             flex: 1;
-            font-weight: 500;
-            color: var(--lt-color-text-default);
+            color: white;
         }
 
-        .equipment-item input[type="checkbox"]:checked + label {
-            color: #ff6b35;
-            font-weight: 600;
+        .item input:checked + label {
+            color: #ffffff;
+            font-weight: bold;
         }
 
         .bulk-controls {
@@ -226,22 +158,17 @@
         }
 
         .bulk-btn {
-            background: var(--lt-color-background-dark);
-            color: var(--lt-color-text-default);
-            border: 1px solid var(--lt-color-border-default);
+            background: #333;
+            color: white;
+            border: 1px solid #555;
             padding: 8px 16px;
-            margin: 0 6px;
+            margin: 0 5px;
             cursor: pointer;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            border-radius: 5px;
         }
 
         .bulk-btn:hover {
-            background: var(--lt-color-background-dark);
-            border-color: var(--lt-color-border-dark);
-            color: var(--lt-color-text-dark);
+            background: #444;
         }
     </style>
 </head>
@@ -249,7 +176,7 @@
     <div class="container">
         <h1>The Finals Loadout Randomizer</h1>
         
-        <div class="randomizer-section">
+        <div class="section">
             <div class="controls">
                 <button class="btn" onclick="generateRandomLoadout()">Generate Random Loadout</button>
                 <button class="btn" onclick="generateAllBuilds()">Generate All 3 Builds</button>
@@ -258,7 +185,7 @@
             <div id="results"></div>
         </div>
 
-        <div class="randomizer-section">
+        <div class="section">
             <div class="bulk-controls">
                 <button class="bulk-btn" onclick="selectAll()">Select All</button>
                 <button class="bulk-btn" onclick="deselectAll()">Deselect All</button>
@@ -285,23 +212,12 @@
             }
         }
 
-        function isDefaultWeapon(weapon, buildId) {
-            // Default starter weapons for each build
-            const defaultWeapons = {
-                'LI': ['XP'], // Light: XP-54
-                'MD': ['AK'], // Medium: AKM  
-                'HV': ['SL']  // Heavy: Sledgehammer
-            };
-            
-            return defaultWeapons[buildId] && defaultWeapons[buildId].includes(weapon.id);
-        }
-
         function populateEquipmentToggles() {
             const grid = document.getElementById('equipmentGrid');
             
             gameData.forEach(buildData => {
                 const buildDiv = document.createElement('div');
-                buildDiv.className = 'build-section';
+                buildDiv.className = 'build-box';
                 
                 const buildTitle = document.createElement('div');
                 buildTitle.className = 'build-title';
@@ -334,7 +250,7 @@
                     gadgetDiv.appendChild(gadgetTitle);
 
                     buildData.gadgets.forEach(gadget => {
-                        const item = createEquipmentToggle(gadget.id, gadget.name, gadget.value === 0);
+                        const item = createEquipmentToggle(gadget.id, gadget.name, true);
                         gadgetDiv.appendChild(item);
                     });
                     buildDiv.appendChild(gadgetDiv);
@@ -350,7 +266,7 @@
                     weaponDiv.appendChild(weaponTitle);
 
                     buildData.weapons.forEach(weapon => {
-                        const item = createEquipmentToggle(weapon.id, weapon.name, weapon.value === 0);
+                        const item = createEquipmentToggle(weapon.id, weapon.name, true);
                         weaponDiv.appendChild(item);
                     });
                     buildDiv.appendChild(weaponDiv);
@@ -362,7 +278,7 @@
 
         function createEquipmentToggle(id, name, defaultChecked) {
             const item = document.createElement('div');
-            item.className = 'equipment-item';
+            item.className = 'item';
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
@@ -481,8 +397,8 @@
                     <p><strong>Specialization:</strong> ${loadout.specialization}</p>
                     <p><strong>Weapon:</strong> ${loadout.weapon}</p>
                     <p><strong>Gadgets:</strong> ${loadout.gadgets.join(', ')}</p>
-                    <div class="loadout-url">
-                        <strong>URL:</strong> <a href="${loadout.url}" target="_blank" style="color: #ff6b35;">${loadout.url}</a>
+                    <div class="url-box">
+                        <strong>URL:</strong> <a href="${loadout.url}" target="_blank" style="color: white; text-decoration: underline;">${loadout.url}</a>
                     </div>
                 `;
 
