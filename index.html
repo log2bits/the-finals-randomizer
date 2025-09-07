@@ -65,21 +65,21 @@
           <span id="cacheInfo" class="pill">Seen rules: –</span>
         </div>
         <div class="legend" style="margin-top:10px">
-          <span class="tag">Guarantees per class: <span class="nowrap mono">≥0</span> spec, <span class="nowrap mono">≥0</span> gadgets, <span class="nowrap mono">≥1</span> weapon</span>
-          <span class="tag">Also: at least <span class="mono">20</span> allowed & <span class="mono">20</span> banned overall</span>
+          <span class="tag">Guarantee: <span class="nowrap mono">≥1</span> weapon per class</span>
+          <span class="tag">Also: at least <span class="mono">20</span> allowed & <span class="mono">25</span> banned overall</span>
         </div>
         <div id="status" class="small" style="margin-top:8px;"></div>
       </section>
 
       <section class="card">
         <div class="title">Controls</div>
-        <p class="muted small">Rules are intentionally simple for humans to apply quickly (letters, digits, hyphens, spaces). The generator will try multiple rules until it finds a balanced one you haven’t used yet.</p>
+        <p class="muted small">Rules are intentionally simple for humans to apply quickly (letters, letter-pairs, digits, hyphens, spaces). The generator tries multiple rules until it finds a balanced one you haven’t used yet.</p>
         <details>
           <summary>How rules work (dev notes)</summary>
           <ul class="small">
             <li>Modular: add rules in <span class="mono">RULES</span>.</li>
             <li>Each rule defines <span class="mono">genParams(ctx)</span> and <span class="mono">predicate(name, params)</span>.</li>
-            <li>We compute letter/symbol frequencies and sample parameters that tend to split near 50/50.</li>
+            <li>We auto-discover frequent <b>bigrams</b> and pick ones near 50/50 splits.</li>
             <li>Uniqueness via <span class="mono">localStorage["tfr_used_rules_v1"]</span>.</li>
           </ul>
         </details>
@@ -102,13 +102,19 @@
 
   <script>
     // ----------------------------
-    // Utilities
+    // Config
     // ----------------------------
     const USED_RULES_KEY = "tfr_used_rules_v1";
-    const MAX_RULE_ATTEMPTS = 300;
-    const MIN_ALLOWED = 20, MIN_BANNED = 20;
-    const MIN_PER_CLASS = { specialization: 0, gadget: 0, weapon: 1 };
+    const MAX_RULE_ATTEMPTS = 600; // more tries for more variety
+    const MIN_ALLOWED = 20;        // ↓ from 25
+    const MIN_BANNED  = 20;        // keep meaningful bans
 
+    // Only guarantee ≥1 weapon per class
+    const MIN_PER_CLASS = { weapon: 1 };
+
+    // ----------------------------
+    // Utilities
+    // ----------------------------
     const sample = arr => arr[Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / 2**32 * arr.length)];
     const shuffle = arr => arr.map(v=>[v, crypto.getRandomValues(new Uint32Array(1))[0]]).sort((a,b)=>a[1]-b[1]).map(x=>x[0]);
 
@@ -119,17 +125,13 @@
     function saveUsedRules(set){
       localStorage.setItem(USED_RULES_KEY, JSON.stringify(Array.from(set)));
     }
-    function resetUsedRules(){
-      localStorage.removeItem(USED_RULES_KEY);
-    }
+    function resetUsedRules(){ localStorage.removeItem(USED_RULES_KEY); }
 
     // ----------------------------
     // Fetch data
     // ----------------------------
     const DATA_URL = "https://raw.githubusercontent.com/log2bits/the-finals-randomizer/refs/heads/main/data.json";
-
     async function fetchData(){
-      // Try remote first; fall back to embedded minimal error if needed
       const res = await fetch(DATA_URL, {cache:"no-store"});
       if(!res.ok) throw new Error("Failed to fetch data.json from GitHub");
       return await res.json();
@@ -139,7 +141,6 @@
     // Data helpers
     // ----------------------------
     function flattenItems(builds){
-      // returns array of {buildName, category, id, name}
       const out = [];
       for(const build of builds){
         const bName = build.build?.name || "Unknown";
@@ -151,9 +152,8 @@
       }
       return out;
     }
-
     function byBuildAndCategory(items){
-      const map = {}; // map[buildName][category] = [items]
+      const map = {};
       for(const it of items){
         map[it.buildName] ??= {};
         map[it.buildName][it.category] ??= [];
@@ -163,16 +163,9 @@
     }
 
     // ----------------------------
-    // Rule engine (modular)
-    // Each rule has:
-    //   id: string
-    //   label(params): string   // human readable description
-    //   genParams(ctx): array   // candidate parameter values
-    //   predicate(name, params): boolean
+    // Stats for letters & bigrams
     // ----------------------------
-
     function makeLetterStats(items){
-      // Count presence of each letter a-z in names
       const counts = {};
       const total = items.length;
       const names = items.map(i=>i.name.toLowerCase());
@@ -183,40 +176,93 @@
       return {counts, total};
     }
 
-    function hasDigit(s){ return /\d/.test(s); }
-    function hasHyphen(s){ return s.includes("-"); }
-    function hasApostrophe(s){ return s.includes("'"); }
-    function hasSpace(s){ return s.includes(" "); }
+    function makeBigramStats(items){
+      const total = items.length;
+      const names = items.map(i=>i.name.toLowerCase());
+      const bigrams = new Map();
+      // Collect unique bigrams present in this dataset (letters only for human ease)
+      const seenSet = new Set();
+      for(const n of names){
+        const lettersOnly = n.replace(/[^a-z]/g, " ");
+        const seenInThisName = new Set();
+        for(let i=0;i<lettersOnly.length-1;i++){
+          const a = lettersOnly[i], b = lettersOnly[i+1];
+          if(/[a-z]/.test(a) && /[a-z]/.test(b)){
+            const bg = a+b;
+            seenInThisName.add(bg);
+          }
+        }
+        for(const bg of seenInThisName) seenSet.add(bg);
+      }
+      // Count presence
+      for(const bg of seenSet){
+        let c = 0;
+        for(const n of names) if(n.includes(bg)) c++;
+        bigrams.set(bg, c);
+      }
+      return { counts: bigrams, total };
+    }
 
-    // Helper to bias letter choices toward ~half split
-    function pickLettersNearHalf(letterStats, mode){ // mode: "include" or "exclude"
-      const {counts, total} = letterStats;
-      const targets = [];
-      for(const [ch, c] of Object.entries(counts)){
+    function pickNearHalfFromCounts(countsObjOrMap, total, mode){
+      // counts can be an object (letters) or Map (bigrams)
+      const entries = countsObjOrMap instanceof Map
+        ? Array.from(countsObjOrMap.entries())
+        : Object.entries(countsObjOrMap);
+      const scored = entries.map(([token, c])=>{
         const allowedIfInclude = c;
         const allowedIfExclude = total - c;
         const allowed = (mode === "include") ? allowedIfInclude : allowedIfExclude;
-        const score = Math.abs(allowed - total/2); // closeness to half
-        targets.push({ch, allowed, score});
-      }
-      // Sort by closeness to half and take top 10 as candidates
-      targets.sort((a,b)=> a.score - b.score);
-      return targets.slice(0, 10).map(t=>t.ch);
+        const score = Math.abs(allowed - total/2);
+        return { token, allowed, score };
+      });
+      scored.sort((a,b)=> a.score - b.score);
+      // return a handful of strong 50/50 candidates
+      return scored.slice(0, 18).map(s=>s.token);
     }
 
+    // ----------------------------
+    // Quick checks
+    // ----------------------------
+    const hasDigit = s => /\d/.test(s);
+    const hasHyphen = s => s.includes("-");
+    const hasApostrophe = s => s.includes("'");
+    const hasSpace = s => s.includes(" ");
+    const startsWithVowel = s => /^[aeiou]/i.test(s.trim());
+    const endsWithVowel = s => /[aeiou]$/i.test(s.trim());
+
+    // ----------------------------
+    // Rules (modular)
+    // ----------------------------
     const RULES = [
+      // Letter presence (generic)
       {
         id: "include_letter",
         label: p => `ALLOWED if the name has the letter “${p}” (case-insensitive).`,
-        genParams: ctx => pickLettersNearHalf(ctx.letterStats, "include"),
+        genParams: ctx => pickNearHalfFromCounts(ctx.letterStats.counts, ctx.letterStats.total, "include"),
         predicate: (name, p) => name.toLowerCase().includes(p),
       },
       {
         id: "exclude_letter",
         label: p => `ALLOWED if the name has NO letter “${p}”.`,
-        genParams: ctx => pickLettersNearHalf(ctx.letterStats, "exclude"),
+        genParams: ctx => pickNearHalfFromCounts(ctx.letterStats.counts, ctx.letterStats.total, "exclude"),
         predicate: (name, p) => !name.toLowerCase().includes(p),
       },
+
+      // Bigram (letter-pair) presence (auto-discovered, near 50/50)
+      {
+        id: "include_bigram",
+        label: p => `ALLOWED if the name contains the letter pair “${p}”.`,
+        genParams: ctx => pickNearHalfFromCounts(ctx.bigramStats.counts, ctx.bigramStats.total, "include"),
+        predicate: (name, p) => name.toLowerCase().includes(p),
+      },
+      {
+        id: "exclude_bigram",
+        label: p => `ALLOWED if the name does NOT contain the letter pair “${p}”.`,
+        genParams: ctx => pickNearHalfFromCounts(ctx.bigramStats.counts, ctx.bigramStats.total, "exclude"),
+        predicate: (name, p) => !name.toLowerCase().includes(p),
+      },
+
+      // Simple symbol/digit flags
       {
         id: "has_digit",
         label: () => "ALLOWED if the name has any number (0–9).",
@@ -241,12 +287,23 @@
         genParams: () => [true],
         predicate: (name) => hasSpace(name),
       },
-      // Add new rules here. Keep them human-easy and quick to verify.
+
+      // Vowel start/end (very fast for humans)
+      {
+        id: "starts_with_vowel",
+        label: () => "ALLOWED if the name starts with a vowel (A, E, I, O, U).",
+        genParams: () => [true],
+        predicate: (name) => startsWithVowel(name),
+      },
+      {
+        id: "ends_with_vowel",
+        label: () => "ALLOWED if the name ends with a vowel (A, E, I, O, U).",
+        genParams: () => [true],
+        predicate: (name) => endsWithVowel(name),
+      },
     ];
 
-    function ruleKey(ruleId, params){
-      return `${ruleId}::${JSON.stringify(params)}`;
-    }
+    function ruleKey(ruleId, params){ return `${ruleId}::${JSON.stringify(params)}`; }
 
     // ----------------------------
     // Selection / constraints
@@ -258,38 +315,26 @@
       }
       return {allowed, banned};
     }
-
     function meetsGlobalBalance(allowedCount, bannedCount){
       return allowedCount >= MIN_ALLOWED && bannedCount >= MIN_BANNED;
     }
 
     function meetsPerClassMinimums(allowedItems){
-      // Build -> category -> count
+      // Only enforce ≥1 weapon per class now
       const map = byBuildAndCategory(allowedItems);
-      const builds = Object.keys(map);
-      // If some classes are missing entirely in data, treat them as failing unless their categories don't exist
-      for(const buildName of builds){
-        const cats = map[buildName];
-        for (const [cat, min] of Object.entries(MIN_PER_CLASS)){
-          const have = (cats[cat]?.length || 0);
-          if (have < min) return false;
-        }
-      }
-      // Also ensure any build present in data gets minimums; if some build is missing (unexpected), verify it from data shape
-      // To be thorough, check globally present builds by inspecting source data:
-      if(window.__ALL_BUILD_NAMES){
-        for(const b of window.__ALL_BUILD_NAMES){
-          if(!map[b]) return false; // must have at least something allowed in that build
-          for(const [cat, min] of Object.entries(MIN_PER_CLASS)){
-            if((map[b][cat]?.length || 0) < min) return false;
-          }
-        }
+      const buildsPresent = window.__ALL_BUILD_NAMES || [];
+      for(const b of buildsPresent){
+        const cats = map[b] || {};
+        const haveWeapons = (cats.weapon?.length || 0);
+        if (haveWeapons < (MIN_PER_CLASS.weapon || 0)) return false;
       }
       return true;
     }
 
+    // ----------------------------
+    // Rendering
+    // ----------------------------
     function renderLists(allowed, banned){
-      // Allowed grouped by Build then Category
       const byBuild = {};
       for(const it of allowed){
         byBuild[it.buildName] ??= { specialization:[], gadget:[], weapon:[] };
@@ -308,7 +353,6 @@
         allowedWrap.appendChild(sect);
       }
 
-      // Banned flattened, split in two columns for readability
       const bannedWrap = document.getElementById("bannedWrap");
       const half = Math.ceil(banned.length/2);
       const colA = banned.slice(0, half), colB = banned.slice(half);
@@ -323,7 +367,6 @@
         </div>
       `;
     }
-
     function showCounts(allowedCount, bannedCount, okPerClass){
       const a = document.getElementById("countAllowed");
       const b = document.getElementById("countBanned");
@@ -333,10 +376,13 @@
       b.className = `pill ${bannedCount>=MIN_BANNED ? "ok":"bad"}`;
       const status = document.getElementById("status");
       status.innerHTML = okPerClass
-        ? `<span class="success">All per-class minimums satisfied.</span>`
-        : `<span class="error">Per-class minimums NOT satisfied.</span>`;
+        ? `<span class="success">All per-class weapon minimums satisfied.</span>`
+        : `<span class="error">Per-class weapon minimums NOT satisfied.</span>`;
     }
 
+    // ----------------------------
+    // Generator
+    // ----------------------------
     async function generateRuleAndRender(builds){
       const items = flattenItems(builds);
       const allBuildNames = builds.map(b=>b.build?.name).filter(Boolean);
@@ -344,11 +390,12 @@
 
       const ctx = {
         letterStats: makeLetterStats(items),
+        bigramStats: makeBigramStats(items),
         items
       };
 
       const used = loadUsedRules();
-      const ruleOrder = shuffle([...RULES]); // randomize rule order per attempt batch
+      const ruleOrder = shuffle([...RULES]);
       let chosen = null, chosenParams = null, part = null;
 
       outer:
@@ -358,12 +405,10 @@
         for(const p of paramsList){
           const key = ruleKey(rule.id, p);
           if(used.has(key)) continue;
-          const res = partition(items, rule.predicate, p);
-          const okGlobal = meetsGlobalBalance(res.allowed.length, res.banned.length);
-          if(!okGlobal) continue;
 
-          const okPerClass = meetsPerClassMinimums(res.allowed);
-          if(!okPerClass) continue;
+          const res = partition(items, rule.predicate, p);
+          if(!meetsGlobalBalance(res.allowed.length, res.banned.length)) continue;
+          if(!meetsPerClassMinimums(res.allowed)) continue;
 
           chosen = rule; chosenParams = p; part = res;
           used.add(key);
@@ -374,7 +419,6 @@
 
       const ruleText = document.getElementById("ruleText");
       const cacheInfo = document.getElementById("cacheInfo");
-
       cacheInfo.textContent = `Seen rules: ${loadUsedRules().size}`;
 
       if(!chosen){
