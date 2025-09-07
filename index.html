@@ -106,8 +106,8 @@
     // ----------------------------
     const USED_RULES_KEY = "tfr_used_rules_v1";
     const MAX_RULE_ATTEMPTS = 300;
-    const MIN_ALLOWED = 25, MIN_BANNED = 25;
-    const MIN_PER_CLASS = { specialization: 1, gadget: 3, weapon: 1 };
+    const MIN_ALLOWED = 20, MIN_BANNED = 20;
+    const MIN_PER_CLASS = { specialization: 0, gadget: 0, weapon: 1 };
 
     const sample = arr => arr[Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / 2**32 * arr.length)];
     const shuffle = arr => arr.map(v=>[v, crypto.getRandomValues(new Uint32Array(1))[0]]).sort((a,b)=>a[1]-b[1]).map(x=>x[0]);
