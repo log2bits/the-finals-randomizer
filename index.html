@@ -252,7 +252,10 @@
                     const letter = letters[Math.floor(Math.random() * letters.length)];
                     return {
                         description: `Contains the letter "${letter.toUpperCase()}"`,
-                        test: (name) => name.toLowerCase().includes(letter),
+                        test: (name) => {
+                            if (typeof name !== 'string') return false;
+                            return name.toLowerCase().includes(letter);
+                        },
                         ruleString: `contains_${letter}`
                     };
                 }
@@ -264,7 +267,10 @@
                     const letter = letters[Math.floor(Math.random() * letters.length)];
                     return {
                         description: `Does NOT contain the letter "${letter.toUpperCase()}"`,
-                        test: (name) => !name.toLowerCase().includes(letter),
+                        test: (name) => {
+                            if (typeof name !== 'string') return false;
+                            return !name.toLowerCase().includes(letter);
+                        },
                         ruleString: `not_contains_${letter}`
                     };
                 }
@@ -276,7 +282,10 @@
                     const letter = letters[Math.floor(Math.random() * letters.length)];
                     return {
                         description: `Starts with "${letter.toUpperCase()}"`,
-                        test: (name) => name.toLowerCase().startsWith(letter),
+                        test: (name) => {
+                            if (typeof name !== 'string') return false;
+                            return name.toLowerCase().startsWith(letter);
+                        },
                         ruleString: `starts_${letter}`
                     };
                 }
@@ -288,7 +297,10 @@
                     const letter = letters[Math.floor(Math.random() * letters.length)];
                     return {
                         description: `Ends with "${letter.toUpperCase()}"`,
-                        test: (name) => name.toLowerCase().endsWith(letter),
+                        test: (name) => {
+                            if (typeof name !== 'string') return false;
+                            return name.toLowerCase().endsWith(letter);
+                        },
                         ruleString: `ends_${letter}`
                     };
                 }
@@ -297,7 +309,10 @@
                 id: 'contains_number',
                 generateRule: () => ({
                     description: 'Contains a number',
-                    test: (name) => /\d/.test(name),
+                    test: (name) => {
+                        if (typeof name !== 'string') return false;
+                        return /\d/.test(name);
+                    },
                     ruleString: 'contains_number'
                 })
             },
@@ -305,7 +320,10 @@
                 id: 'no_numbers',
                 generateRule: () => ({
                     description: 'Contains NO numbers',
-                    test: (name) => !/\d/.test(name),
+                    test: (name) => {
+                        if (typeof name !== 'string') return false;
+                        return !/\d/.test(name);
+                    },
                     ruleString: 'no_numbers'
                 })
             },
@@ -313,7 +331,10 @@
                 id: 'has_dash',
                 generateRule: () => ({
                     description: 'Contains a dash (-)',
-                    test: (name) => name.includes('-'),
+                    test: (name) => {
+                        if (typeof name !== 'string') return false;
+                        return name.includes('-');
+                    },
                     ruleString: 'has_dash'
                 })
             },
@@ -321,7 +342,10 @@
                 id: 'no_dash',
                 generateRule: () => ({
                     description: 'Does NOT contain a dash (-)',
-                    test: (name) => !name.includes('-'),
+                    test: (name) => {
+                        if (typeof name !== 'string') return false;
+                        return !name.includes('-');
+                    },
                     ruleString: 'no_dash'
                 })
             },
@@ -329,7 +353,10 @@
                 id: 'has_space',
                 generateRule: () => ({
                     description: 'Contains a space',
-                    test: (name) => name.includes(' '),
+                    test: (name) => {
+                        if (typeof name !== 'string') return false;
+                        return name.includes(' ');
+                    },
                     ruleString: 'has_space'
                 })
             },
@@ -337,7 +364,10 @@
                 id: 'no_space',
                 generateRule: () => ({
                     description: 'Does NOT contain a space',
-                    test: (name) => !name.includes(' '),
+                    test: (name) => {
+                        if (typeof name !== 'string') return false;
+                        return !name.includes(' ');
+                    },
                     ruleString: 'no_space'
                 })
             },
@@ -345,7 +375,10 @@
                 id: 'odd_words',
                 generateRule: () => ({
                     description: 'Has an ODD number of words',
-                    test: (name) => name.split(' ').length % 2 === 1,
+                    test: (name) => {
+                        if (typeof name !== 'string') return false;
+                        return name.split(' ').length % 2 === 1;
+                    },
                     ruleString: 'odd_words'
                 })
             },
@@ -353,7 +386,10 @@
                 id: 'even_words',
                 generateRule: () => ({
                     description: 'Has an EVEN number of words',
-                    test: (name) => name.split(' ').length % 2 === 0,
+                    test: (name) => {
+                        if (typeof name !== 'string') return false;
+                        return name.split(' ').length % 2 === 0;
+                    },
                     ruleString: 'even_words'
                 })
             },
@@ -361,7 +397,10 @@
                 id: 'contains_double_letter',
                 generateRule: () => ({
                     description: 'Contains a double letter (like "aa", "bb", etc.)',
-                    test: (name) => /(.)\1/.test(name.toLowerCase()),
+                    test: (name) => {
+                        if (typeof name !== 'string') return false;
+                        return /(.)\1/.test(name.toLowerCase());
+                    },
                     ruleString: 'double_letter'
                 })
             },
@@ -369,7 +408,10 @@
                 id: 'vowel_start',
                 generateRule: () => ({
                     description: 'Starts with a vowel (A, E, I, O, U)',
-                    test: (name) => 'aeiou'.includes(name.toLowerCase()[0]),
+                    test: (name) => {
+                        if (typeof name !== 'string' || name.length === 0) return false;
+                        return 'aeiou'.includes(name.toLowerCase()[0]);
+                    },
                     ruleString: 'vowel_start'
                 })
             },
@@ -377,7 +419,10 @@
                 id: 'consonant_start',
                 generateRule: () => ({
                     description: 'Starts with a consonant',
-                    test: (name) => !'aeiou'.includes(name.toLowerCase()[0]),
+                    test: (name) => {
+                        if (typeof name !== 'string' || name.length === 0) return false;
+                        return !'aeiou'.includes(name.toLowerCase()[0]);
+                    },
                     ruleString: 'consonant_start'
                 })
             }
