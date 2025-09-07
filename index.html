@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>The Finals Equipment Randomizer — Mega Rules</title>
+  <title>The Finals Equipment Randomizer — Fast Rules</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    :root { --bg:#0b0b10; --card:#141420; --muted:#8b8ba0; --text:#e8e8ee; --ok:#7ce38b; --bad:#f7768e; }
+    :root { --bg:#0b0b10; --card:#141420; --muted:#8b8ba0; --text:#e8e8ee; --ok:#7ce38b; --bad:#f7768e; --border:#1d1d2b; }
     * { box-sizing: border-box; }
-    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans"; background: var(--bg); color: var(--text);}
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, "Helvetica Neue", Arial; background: var(--bg); color: var(--text);}
     header { padding: 16px 20px; display:flex; gap:12px; align-items:center; justify-content:space-between; border-bottom:1px solid #1e1e2a;}
     h1 { margin:0; font-size: clamp(18px, 3vw, 22px); letter-spacing: .2px; }
     .actions { display:flex; gap:10px; flex-wrap:wrap; }
@@ -17,7 +17,7 @@
     main { padding: 18px; max-width: 1200px; margin: 0 auto; display: grid; gap: 18px; }
     .row { display:grid; grid-template-columns: 1.2fr .8fr; gap:18px; }
     @media (max-width: 900px){ .row{ grid-template-columns:1fr; } }
-    .card { background: var(--card); border:1px solid #1d1d2b; border-radius:16px; padding:16px; }
+    .card { background: var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; }
     .title { font-weight:700; margin: 0 0 8px; font-size: 18px; }
     .muted { color: var(--muted); font-size: 13px; }
     .rule { font-size: 16px; margin: 6px 0 10px; }
@@ -27,15 +27,15 @@
     .pill.bad { border-color:#51303a; color: var(--bad);}
     .grid { display:grid; gap:12px; grid-template-columns: repeat(3, 1fr); }
     @media (max-width: 900px){ .grid{ grid-template-columns:1fr; } }
-    .group h3 { margin:0 0 6px; font-size: 15px; }
-    ul { list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; gap:6px; }
-    li { background:#11111a; border:1px solid #1f1f30; padding:6px 8px; border-radius:10px; font-size: 13px; }
-    .lists { display:grid; gap:12px; grid-template-columns: 1fr 1fr; }
-    @media (max-width: 700px){ .lists{ grid-template-columns:1fr; } }
+    .group h3 { margin:0 0 8px; font-size: 16px; }
+    .cols { display:grid; gap:12px; grid-template-columns: 1fr 1fr 1fr; }
+    @media (max-width: 800px){ .cols{ grid-template-columns:1fr; } }
+    .subhead { color: var(--muted); font-size:12px; margin-bottom:6px; }
+    ul { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+    li { background:#11111a; border:1px solid #1f1f30; padding:6px 8px; border-radius:10px; font-size: 13px; display:flex; align-items:center; justify-content:space-between; }
+    .banned { color: var(--bad); text-decoration: line-through; opacity:.95; border-color:#3a1f26; background:#130d10; }
+    .id { color:#7f7fa0; font-size:11px; }
     .small { font-size: 12px; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    .error { color: var(--bad); }
-    .success { color: var(--ok); }
   </style>
 </head>
 <body>
@@ -57,28 +57,22 @@
           <span id="countBanned" class="pill">Banned: –</span>
           <span id="cacheInfo" class="pill">Seen rules: –</span>
         </div>
-        <div class="small muted" style="margin-top:8px;">
-          Balance constraints: <span class="mono">Allowed ≥ 20</span>, <span class="mono">Banned ≥ 25</span>. No per-class minimums.
+        <div class="muted small" style="margin-top:8px;">
+          Constraints: <b>Allowed ≥ 15</b>, <b>Banned ≥ 25</b>, <b>≥1 weapon allowed overall</b>.
         </div>
       </section>
 
       <section class="card">
         <div class="title">Notes</div>
         <p class="muted small">
-          Rules are human-fast: letters, letter-pairs, starts/ends, digits, symbols, keywords, and simple combos (AND/OR). The generator tries many parameterizations and only keeps balanced, unused ones. Data is fetched live from your GitHub JSON.
+          Rules are human-fast: single letters, ≤2-letter sets, starts/ends, digits, symbols, bigrams, plus a few simple AND-combos (no word rules). Unused rules are cached in your browser and skipped automatically.
         </p>
       </section>
     </div>
 
     <section class="card">
-      <div class="title">Allowed Equipment (by Class & Category)</div>
-      <div id="allowedWrap" class="grid"></div>
-    </section>
-
-    <section class="card">
-      <div class="title">Banned (for reference)</div>
-      <div id="bannedWrap" class="lists"></div>
-      <p class="muted small" style="margin-top:10px">Players usually only need the rule & the allowed list.</p>
+      <div class="title">Equipment by Class & Category</div>
+      <div id="byClass" class="grid"></div>
     </section>
   </main>
 
@@ -87,11 +81,12 @@
     // Config
     // ----------------------------
     const DATA_URL = "https://raw.githubusercontent.com/log2bits/the-finals-randomizer/refs/heads/main/data.json";
-    const USED_RULES_KEY = "tfr_used_rules_v3";
+    const USED_RULES_KEY = "tfr_used_rules_v4";
 
     const MAX_RULE_ATTEMPTS = 1500;
-    const MIN_ALLOWED = 20;
-    const MIN_BANNED  = 20;
+    const MIN_ALLOWED = 15;
+    const MIN_BANNED  = 25;
+    const REQUIRE_AT_LEAST_ONE_WEAPON = true;
 
     const SYMBOLS = ["-", "'", "/", "+", "&", ".", "_"];
     const DIGITS  = ["0","1","2","3","4","5","6","7","8","9"];
@@ -116,13 +111,8 @@
       return res;
     }
 
-    function loadUsedRules(){
-      try { return new Set(JSON.parse(localStorage.getItem(USED_RULES_KEY) || "[]")); }
-      catch { return new Set(); }
-    }
-    function saveUsedRules(set){
-      localStorage.setItem(USED_RULES_KEY, JSON.stringify(Array.from(set)));
-    }
+    function loadUsedRules(){ try { return new Set(JSON.parse(localStorage.getItem(USED_RULES_KEY) || "[]")); } catch { return new Set(); } }
+    function saveUsedRules(set){ localStorage.setItem(USED_RULES_KEY, JSON.stringify(Array.from(set))); }
     function resetUsedRules(){ localStorage.removeItem(USED_RULES_KEY); }
 
     // ----------------------------
@@ -146,18 +136,17 @@
       }
       return out;
     }
-    function byBuildAndCategory(items){
+    function groupByBuildAndCategory(items){
       const map = {};
       for(const it of items){
-        map[it.buildName] ??= {};
-        map[it.buildName][it.category] ??= [];
+        map[it.buildName] ??= { specialization:[], gadget:[], weapon:[] };
         map[it.buildName][it.category].push(it);
       }
       return map;
     }
 
     // ----------------------------
-    // Stats & tokenization
+    // Stats (letters & bigrams)
     // ----------------------------
     function makeLetterStats(items){
       const counts = {};
@@ -180,9 +169,7 @@
         const seenLocal = new Set();
         for(let i=0;i<s.length-1;i++){
           const a=s[i], b=s[i+1];
-          if(/[a-z]/.test(a) && /[a-z]/.test(b)){
-            seenLocal.add(a+b);
-          }
+          if(/[a-z]/.test(a) && /[a-z]/.test(b)) seenLocal.add(a+b);
         }
         for(const bg of seenLocal) seenGlobal.add(bg);
       }
@@ -193,41 +180,13 @@
       return { counts: bigrams, total };
     }
 
-    function extractKeywords(items, {minLen=3, maxCount=150} = {}){
-      const counts = new Map();
-      for(const it of items){
-        const words = it.name.toLowerCase().split(/[^a-z0-9]+/g).filter(w => w.length >= minLen);
-        const set = new Set(words); // count per-name presence
-        for(const w of set){
-          counts.set(w, (counts.get(w)||0)+1);
-        }
-      }
-      // Sort by frequency and keep the head (but not everything—avoid super rare noise)
-      const sorted = Array.from(counts.entries()).sort((a,b)=> b[1]-a[1]);
-      return new Map(sorted.slice(0, maxCount)); // Map<word,count>
-    }
-
-    function presenceCounts(items, tokens, testFn){
-      const counts = new Map();
-      const total = items.length;
-      for(const token of tokens){
-        let c = 0;
-        for(const it of items){
-          if(testFn(it.name, token)) c++;
-        }
-        counts.set(token, c);
-      }
-      return { counts, total };
-    }
-
     function pickNearHalfFrom(entries, total, mode){
       // entries: [token,count]
       const scored = entries.map(([token, c])=>{
         const allowed = (mode === "include") ? c : (total - c);
         return { token, allowed, score: Math.abs(allowed - total/2) };
       }).sort((a,b)=> a.score - b.score);
-      // take a generous top slice to widen variety
-      return scored.slice(0, 36).map(s=>s.token);
+      return scored.slice(0, 36).map(s=>s.token); // generous slice for variety
     }
 
     // ----------------------------
@@ -238,42 +197,52 @@
       return arr.some(tok => t.includes(tok.toLowerCase()));
     };
     const excludesAll = (s, arr) => !hasAny(s, arr);
-    const hasDigit = s => /\d/.test(s);
-    const hasHyphen = s => s.includes("-");
-    const hasApostrophe = s => s.includes("'");
-    const hasSlash = s => s.includes("/");
-    const hasPlus = s => s.includes("+");
-    const hasAmp = s => s.includes("&");
-    const hasDot = s => s.includes(".");
     const hasSpace = s => s.includes(" ");
     const singleWord = s => !hasSpace(s.trim());
-    const startsWithVowel = s => /^[aeiou]/i.test(s.trim());
-    const endsWithVowel = s => /[aeiou]$/i.test(s.trim());
     const startsWith = (s, ch) => s.trim().toLowerCase().startsWith(ch);
     const endsWith = (s, ch) => s.trim().toLowerCase().endsWith(ch);
+    const startsWithVowel = s => /^[aeiou]/i.test(s.trim());
+    const endsWithVowel = s => /[aeiou]$/i.test(s.trim());
+    const startsWithConsonant = s => /^[^aeiou\W_]/i.test(s.trim());
+    const endsWithConsonant = s => /[^aeiou\W_]$/i.test(s.trim());
+    const doubleChar = s => /(.)\1/.test(s.replace(/\s+/g,""));
 
     // ----------------------------
-    // RULES
+    // RULES (no keyword rules; letter sets ≤ 2)
     // Each rule: { id, label(params), genParams(ctx), predicate(name, params) }
     // ----------------------------
     function listPretty(arr){ return arr.map(x => x.length===1 ? x.toUpperCase() : x).join(", "); }
 
     const BASE_RULES = [
-      // 1) Letters (single, include/exclude)
+      // Letters (single include/exclude)
       {
         id: "include_letter",
-        label: p => `ALLOWED if the name contains the letter “${p.toUpperCase()}”.`,
+        label: p => `ALLOWED if the name contains “${p.toUpperCase()}”.`,
         genParams: ctx => pickNearHalfFrom(Object.entries(ctx.letterStats.counts), ctx.letterStats.total, "include"),
         predicate: (name, p) => name.toLowerCase().includes(p),
       },
       {
         id: "exclude_letter",
-        label: p => `ALLOWED if the name has NO letter “${p.toUpperCase()}”.`,
+        label: p => `ALLOWED if the name has NO “${p.toUpperCase()}”.`,
         genParams: ctx => pickNearHalfFrom(Object.entries(ctx.letterStats.counts), ctx.letterStats.total, "exclude"),
         predicate: (name, p) => !name.toLowerCase().includes(p),
       },
 
-      // 2) Starts/Ends with single letter (and NOT starts/ends)
+      // Letter sets (any-of) — capped to size 2
+      {
+        id: "include_any_two_letters",
+        label: set => `ALLOWED if the name has “${listPretty(set)}”.`,
+        genParams: ctx => shuffle(kCombinations(Object.keys(ctx.letterStats.counts),2)).slice(0,120),
+        predicate: (name, set) => hasAny(name, set),
+      },
+      {
+        id: "exclude_any_two_letters",
+        label: set => `ALLOWED if the name has NONE of “${listPretty(set)}”.`,
+        genParams: ctx => shuffle(kCombinations(Object.keys(ctx.letterStats.counts),2)).slice(0,120),
+        predicate: (name, set) => excludesAll(name, set),
+      },
+
+      // Starts / Ends with single letter (+ NOT variants)
       {
         id: "starts_with_letter",
         label: ch => `ALLOWED if the name starts with “${ch.toUpperCase()}”.`,
@@ -299,35 +268,21 @@
         predicate: (name, ch) => !endsWith(name, ch),
       },
 
-      // 3) Letter sets (any-of include/exclude)
-      {
-        id: "include_any_letters_set",
-        label: set => `ALLOWED if the name has ANY of these letters: ${listPretty(set)}.`,
-        genParams: ctx => shuffle([...kCombinations(Object.keys(ctx.letterStats.counts),2), ...kCombinations(Object.keys(ctx.letterStats.counts),3)]).slice(0,120),
-        predicate: (name, set) => hasAny(name, set),
-      },
-      {
-        id: "exclude_any_letters_set",
-        label: set => `ALLOWED if the name has NONE of these letters: ${listPretty(set)}.`,
-        genParams: ctx => shuffle([...kCombinations(Object.keys(ctx.letterStats.counts),2), ...kCombinations(Object.keys(ctx.letterStats.counts),3)]).slice(0,120),
-        predicate: (name, set) => excludesAll(name, set),
-      },
-
-      // 4) Bigrams (letter pairs)
+      // Bigrams (letter pairs in sequence)
       {
         id: "include_bigram",
-        label: p => `ALLOWED if the name contains the letter pair “${p}”.`,
+        label: p => `ALLOWED if the name contains the pair “${p}”.`,
         genParams: ctx => pickNearHalfFrom(Array.from(ctx.bigramStats.counts.entries()), ctx.bigramStats.total, "include"),
         predicate: (name, p) => name.toLowerCase().includes(p),
       },
       {
         id: "exclude_bigram",
-        label: p => `ALLOWED if the name does NOT contain the letter pair “${p}”.`,
+        label: p => `ALLOWED if the name does NOT contain the pair “${p}”.`,
         genParams: ctx => pickNearHalfFrom(Array.from(ctx.bigramStats.counts.entries()), ctx.bigramStats.total, "exclude"),
         predicate: (name, p) => !name.toLowerCase().includes(p),
       },
 
-      // 5) Digits & digit sets
+      // Digits / symbols (with small sets)
       {
         id: "has_any_digit",
         label: () => "ALLOWED if the name has any number (0–9).",
@@ -335,166 +290,95 @@
         predicate: (name) => /\d/.test(name),
       },
       {
-        id: "has_digits_subset",
-        label: set => `ALLOWED if the name has ANY of these numbers: ${set.join(", ")}.`,
-        genParams: () => shuffle([...kCombinations(DIGITS,2), ...kCombinations(DIGITS,3), ...kCombinations(DIGITS,4)]).slice(0,120),
+        id: "has_digits_subset_two",
+        label: set => `ALLOWED if the name has ${set.join(" or ")}.`,
+        genParams: () => shuffle(kCombinations(DIGITS,2)).slice(0,60),
         predicate: (name, set) => hasAny(name, set),
       },
-
-      // 6) Symbols & symbol sets
       {
         id: "has_any_symbol",
-        label: () => `ALLOWED if the name has ANY of these symbols: ${SYMBOLS.join(" ")}`,
+        label: () => `ALLOWED if the name has any of: ${SYMBOLS.join(" ")}`,
         genParams: () => [true],
         predicate: (name) => SYMBOLS.some(sym => name.includes(sym)),
       },
       {
-        id: "has_symbols_subset",
-        label: set => `ALLOWED if the name has ANY of these symbols: ${set.join(" ")}`,
-        genParams: () => shuffle([...kCombinations(SYMBOLS,2), ...kCombinations(SYMBOLS,3)]).slice(0,80),
+        id: "has_symbols_subset_two",
+        label: set => `ALLOWED if the name has ${set.join(" or ")}.`,
+        genParams: () => shuffle(kCombinations(SYMBOLS,2)).slice(0,40),
         predicate: (name, set) => set.some(sym => name.includes(sym)),
       },
 
-      // 7) Word form
-      {
-        id: "single_word",
-        label: () => "ALLOWED if the name is a single word (no spaces).",
-        genParams: () => [true],
-        predicate: (name) => singleWord(name),
-      },
-      {
-        id: "multi_word",
-        label: () => "ALLOWED if the name has 2+ words (has a space).",
-        genParams: () => [true],
-        predicate: (name) => hasSpace(name),
-      },
-
-      // 8) Vowel/consonant starts/ends (ultra fast)
-      {
-        id: "starts_with_vowel",
-        label: () => "ALLOWED if the name starts with a vowel (A, E, I, O, U).",
-        genParams: () => [true],
-        predicate: (name) => startsWithVowel(name),
-      },
-      {
-        id: "ends_with_vowel",
-        label: () => "ALLOWED if the name ends with a vowel (A, E, I, O, U).",
-        genParams: () => [true],
-        predicate: (name) => endsWithVowel(name),
-      },
-
-      // 9) Keywords from dataset (include/exclude; combos)
-      {
-        id: "include_keyword",
-        label: w => `ALLOWED if the name contains the word “${w}”.`,
-        genParams: ctx => pickNearHalfFrom(Array.from(ctx.keywordStats.entries()), ctx.keywordStatsTotal, "include"),
-        predicate: (name, w) => name.toLowerCase().includes(w),
-      },
-      {
-        id: "exclude_keyword",
-        label: w => `ALLOWED if the name does NOT contain the word “${w}”.`,
-        genParams: ctx => pickNearHalfFrom(Array.from(ctx.keywordStats.entries()), ctx.keywordStatsTotal, "exclude"),
-        predicate: (name, w) => !name.toLowerCase().includes(w),
-      },
-      {
-        id: "include_any_keywords_set",
-        label: set => `ALLOWED if the name has ANY of these words: ${set.join(", ")}.`,
-        genParams: ctx => {
-          const keys = Array.from(ctx.keywordStats.keys());
-          const pools = [...kCombinations(keys,2), ...kCombinations(keys,3)];
-          return shuffle(pools).slice(0, 120);
-        },
-        predicate: (name, set) => hasAny(name, set),
-      },
-      {
-        id: "exclude_any_keywords_set",
-        label: set => `ALLOWED if the name has NONE of these words: ${set.join(", ")}.`,
-        genParams: ctx => {
-          const keys = Array.from(ctx.keywordStats.keys());
-          const pools = [...kCombinations(keys,2), ...kCombinations(keys,3)];
-          return shuffle(pools).slice(0, 120);
-        },
-        predicate: (name, set) => excludesAll(name, set),
-      },
+      // Word form & simple patterns
+      { id: "single_word", label: () => "ALLOWED if the name is a single word.", genParams: () => [true], predicate: (name) => singleWord(name) },
+      { id: "multi_word",  label: () => "ALLOWED if the name has multiple words.", genParams: () => [true], predicate: (name) => hasSpace(name) },
+      { id: "starts_with_vowel", label: () => "ALLOWED if the name starts with a vowel.", genParams: () => [true], predicate: (name) => startsWithVowel(name) },
+      { id: "ends_with_vowel",   label: () => "ALLOWED if the name ends with a vowel.",   genParams: () => [true], predicate: (name) => endsWithVowel(name) },
+      { id: "starts_with_consonant", label: () => "ALLOWED if the name starts with a consonant.", genParams: () => [true], predicate: (name) => startsWithConsonant(name) },
+      { id: "ends_with_consonant",   label: () => "ALLOWED if the name ends with a consonant.",   genParams: () => [true], predicate: (name) => endsWithConsonant(name) },
+      { id: "double_char", label: () => "ALLOWED if the name has a double letter/number (ee, ll, 11).", genParams: () => [true], predicate: (name) => doubleChar(name) },
     ];
 
-    // Compound rule factory helpers (AND conditions)
-    function compoundLabel(parts){
-      return "ALLOWED if " + parts.join(" AND ");
-    }
-    function compoundRule(id, labelBuilder, paramGen, predicate){
-      return { id, label: labelBuilder, genParams: paramGen, predicate };
-    }
+    // Simple AND-compound rules (still human-easy)
+    function compoundLabel(parts){ return "ALLOWED if " + parts.join(" AND "); }
+    function compoundRule(id, labelBuilder, paramGen, predicate){ return { id, label: labelBuilder, genParams: paramGen, predicate }; }
 
     function buildCompoundRules(ctx){
-      // Use common keywords near 50/50 for good splits
-      const candidateWords = pickNearHalfFrom(Array.from(ctx.keywordStats.entries()), ctx.keywordStatsTotal, "exclude"); // words to exclude
       const letters = Object.keys(ctx.letterStats.counts);
-
-      const letterParams = letters.slice(0); // many
-      const wordParams = shuffle(candidateWords).slice(0, 80);
+      const bigramsTop = pickNearHalfFrom(Array.from(ctx.bigramStats.counts.entries()), ctx.bigramStats.total, "include").slice(0, 24);
 
       const rules = [];
 
-      // A) "Does NOT contain <word> AND starts with a vowel"
+      // A) Starts with vowel AND has a hyphen
       rules.push(compoundRule(
-        "not_word_and_starts_vowel",
-        p => compoundLabel([`the name does NOT contain “${p.word}”`, "it starts with a vowel"]),
-        () => wordParams.map(w => ({word:w})),
-        (name, p) => !name.toLowerCase().includes(p.word) && startsWithVowel(name)
+        "starts_vowel_and_hyphen",
+        () => compoundLabel(["the name starts with a vowel","it has a hyphen"]),
+        () => [true],
+        (name) => startsWithVowel(name) && name.includes("-")
       ));
 
-      // B) "Does NOT contain <word> AND has ANY of digits {1,2,3}"
-      const digitTriples = kCombinations(DIGITS.slice(1,4), 3); // [1,2,3]
+      // B) Single word AND has digits (1 or 2)
+      const digitPairs = kCombinations(DIGITS.slice(0,3), 2); // 0–2 pairs like ["1","2"]
       rules.push(compoundRule(
-        "not_word_and_digits_subset",
-        p => compoundLabel([`the name does NOT contain “${p.word}”`, `it has ANY of these numbers: ${p.digits.join(", ")}`]),
-        () => wordParams.flatMap(w => digitTriples.map(digs => ({word:w, digits:digs}))),
-        (name, p) => !name.toLowerCase().includes(p.word) && hasAny(name, p.digits)
+        "singleword_and_digits_pair",
+        p => compoundLabel(["the name is a single word", `it has ${p.join(" or ")}`]),
+        () => digitPairs,
+        (name, p) => singleWord(name) && hasAny(name, p)
       ));
 
-      // C) "Does NOT contain <word> AND starts with letter X"
+      // C) Not starting with letter X AND ends with letter Y
       rules.push(compoundRule(
-        "not_word_and_starts_letter",
-        p => compoundLabel([`the name does NOT contain “${p.word}”`, `it starts with “${p.letter.toUpperCase()}”`]),
-        () => wordParams.flatMap(w => shuffle(letterParams).slice(0,10).map(l => ({word:w, letter:l}))),
-        (name, p) => !name.toLowerCase().includes(p.word) && startsWith(name, p.letter)
+        "not_starts_X_ends_Y",
+        p => compoundLabel([`it does NOT start with “${p.a.toUpperCase()}”`, `it ends with “${p.b.toUpperCase()}”`]),
+        () => shuffle(kCombinations(letters,2)).slice(0,60).map(([a,b]) => ({a,b})),
+        (name, p) => !startsWith(name, p.a) && endsWith(name, p.b)
       ));
 
-      // D) "Does NOT contain <word> AND ends with letter X"
+      // D) Multi-word AND contains bigram “xy”
       rules.push(compoundRule(
-        "not_word_and_ends_letter",
-        p => compoundLabel([`the name does NOT contain “${p.word}”`, `it ends with “${p.letter.toUpperCase()}”`]),
-        () => wordParams.flatMap(w => shuffle(letterParams).slice(0,10).map(l => ({word:w, letter:l}))),
-        (name, p) => !name.toLowerCase().includes(p.word) && endsWith(name, p.letter)
-      ));
-
-      // E) "Single word AND has symbol subset (any-of)"
-      const symSets = shuffle([...kCombinations(SYMBOLS,2), ...kCombinations(SYMBOLS,3)]).slice(0, 40);
-      rules.push(compoundRule(
-        "single_word_and_symbols_subset",
-        p => compoundLabel(["the name is a single word", `it has ANY of these symbols: ${p.syms.join(" ")}`]),
-        () => symSets.map(syms => ({syms})),
-        (name, p) => singleWord(name) && p.syms.some(sym => name.includes(sym))
-      ));
-
-      // F) "Multi-word AND has letter pair (bigram)"
-      const topBigrams = pickNearHalfFrom(Array.from(ctx.bigramStats.counts.entries()), ctx.bigramStats.total, "include").slice(0, 20);
-      rules.push(compoundRule(
-        "multi_word_and_bigram",
-        p => compoundLabel(["the name has 2+ words", `it contains “${p.bg}”`]),
-        () => topBigrams.map(bg => ({bg})),
+        "multiword_and_bigram",
+        p => compoundLabel(["the name has multiple words", `it contains “${p.bg}”`]),
+        () => bigramsTop.map(bg => ({bg})),
         (name, p) => hasSpace(name) && name.toLowerCase().includes(p.bg)
+      ));
+
+      // E) No symbol subset AND ends with vowel
+      const symPairs = kCombinations(SYMBOLS,2);
+      rules.push(compoundRule(
+        "no_syms_and_ends_vowel",
+        p => compoundLabel([`it has NONE of ${p.syms.join(" or ")}`, "it ends with a vowel"]),
+        () => shuffle(symPairs).slice(0,40).map(syms => ({syms})),
+        (name, p) => p.syms.every(s => !name.includes(s)) && endsWithVowel(name)
       ));
 
       return rules;
     }
 
     // ----------------------------
-    // Rule engine
+    // Rule engine & constraints
     // ----------------------------
     function ruleKey(ruleId, params){
-      const normalized = Array.isArray(params) ? [...params].sort() : (typeof params === "object" && params ? Object.keys(params).sort().reduce((o,k)=> (o[k]=params[k], o), {}) : params);
+      const normalized = Array.isArray(params) ? [...params].sort() :
+        (typeof params === "object" && params ? Object.keys(params).sort().reduce((o,k)=> (o[k]=params[k], o), {}) : params);
       return `${ruleId}::${toKey(normalized)}`;
     }
 
@@ -505,44 +389,51 @@
       }
       return {allowed, banned};
     }
-    function meetsGlobalBalance(a, b){ return a >= MIN_ALLOWED && b >= MIN_BANNED; }
 
-    // ----------------------------
-    // Rendering
-    // ----------------------------
-    function renderLists(allowed, banned){
-      const byBuild = {};
-      for(const it of allowed){
-        byBuild[it.buildName] ??= { specialization:[], gadget:[], weapon:[] };
-        byBuild[it.buildName][it.category].push(it);
-      }
-      const allowedWrap = document.getElementById("allowedWrap");
-      allowedWrap.innerHTML = "";
-      for(const buildName of Object.keys(byBuild)){
-        const sect = document.createElement("div"); sect.className="group";
-        sect.innerHTML = `<h3>${buildName}</h3>
-          <div class="lists">
-            <div><div class="muted small">Specializations</div><ul>${byBuild[buildName].specialization.map(i=>`<li title="${i.id}">${i.name}</li>`).join("")}</ul></div>
-            <div><div class="muted small">Gadgets</div><ul>${byBuild[buildName].gadget.map(i=>`<li title="${i.id}">${i.name}</li>`).join("")}</ul></div>
-            <div><div class="muted small">Weapons</div><ul>${byBuild[buildName].weapon.map(i=>`<li title="${i.id}">${i.name}</li>`).join("")}</ul></div>
-          </div>`;
-        allowedWrap.appendChild(sect);
-      }
-
-      const bannedWrap = document.getElementById("bannedWrap");
-      const half = Math.ceil(banned.length/2);
-      const colA = banned.slice(0, half), colB = banned.slice(half);
-      bannedWrap.innerHTML = `
-        <div>
-          <div class="muted small">Banned (A)</div>
-          <ul>${colA.map(i=>`<li title="${i.buildName} / ${i.category}">${i.name}</li>`).join("")}</ul>
-        </div>
-        <div>
-          <div class="muted small">Banned (B)</div>
-          <ul>${colB.map(i=>`<li title="${i.buildName} / ${i.category}">${i.name}</li>`).join("")}</ul>
-        </div>
-      `;
+    function meetsGlobalBalance(allowed, banned){
+      return allowed >= MIN_ALLOWED && banned >= MIN_BANNED;
     }
+
+    function atLeastOneWeaponAllowed(allowedItems){
+      if(!REQUIRE_AT_LEAST_ONE_WEAPON) return true;
+      return allowedItems.some(it => it.category === "weapon");
+    }
+
+    // ----------------------------
+    // Rendering (inline banned)
+    // ----------------------------
+    function renderByClass(allItems, allowedSet){
+      const container = document.getElementById("byClass");
+      container.innerHTML = "";
+      // Build full map of all items by class & category to display all (allowed + banned)
+      const grouped = {};
+      for(const it of allItems){
+        grouped[it.buildName] ??= { specialization:[], gadget:[], weapon:[] };
+        grouped[it.buildName][it.category].push(it);
+      }
+      for(const [buildName, cats] of Object.entries(grouped)){
+        const groupDiv = document.createElement("div"); groupDiv.className = "group";
+        const cols = document.createElement("div"); cols.className = "cols";
+        groupDiv.innerHTML = `<h3>${buildName}</h3>`;
+        for(const cat of ["specialization","gadget","weapon"]){
+          const block = document.createElement("div");
+          block.innerHTML = `<div class="subhead">${cat[0].toUpperCase()+cat.slice(1)}</div>`;
+          const ul = document.createElement("ul");
+          for(const item of (cats[cat] || [])){
+            const li = document.createElement("li");
+            const isAllowed = allowedSet.has(item.id);
+            if(!isAllowed) li.classList.add("banned");
+            li.innerHTML = `<span>${item.name}</span><span class="id">#${item.id}</span>`;
+            ul.appendChild(li);
+          }
+          block.appendChild(ul);
+          cols.appendChild(block);
+        }
+        groupDiv.appendChild(cols);
+        container.appendChild(groupDiv);
+      }
+    }
+
     function showCounts(a, b){
       const A = document.getElementById("countAllowed");
       const B = document.getElementById("countBanned");
@@ -558,24 +449,14 @@
     async function generateRuleAndRender(builds){
       const items = flattenItems(builds);
 
-      // Build stats
       const letterStats = makeLetterStats(items);
       const bigramStats = makeBigramStats(items);
-      const keywordStats = extractKeywords(items); // Map<word,count>
-      const ctx = {
-        items,
-        letterStats,
-        bigramStats,
-        keywordStats,
-        keywordStatsTotal: items.length
-      };
+      const ctx = { items, letterStats, bigramStats };
 
-      // Assemble rules list (base + dynamic compound)
       const RULES = [...BASE_RULES, ...buildCompoundRules(ctx)];
 
       const used = loadUsedRules();
       const ruleOrder = shuffle([...RULES]);
-
       let chosen = null, chosenParams = null, part = null;
 
       outer:
@@ -588,6 +469,7 @@
 
           const res = partition(items, rule.predicate, p);
           if(!meetsGlobalBalance(res.allowed.length, res.banned.length)) continue;
+          if(REQUIRE_AT_LEAST_ONE_WEAPON && !atLeastOneWeaponAllowed(res.allowed)) continue;
 
           chosen = rule; chosenParams = p; part = res;
           used.add(key); saveUsedRules(used);
@@ -600,15 +482,18 @@
       cacheInfo.textContent = `Seen rules: ${loadUsedRules().size}`;
 
       if(!chosen){
-        ruleText.innerHTML = `<span class="error">Couldn’t find a new balanced rule. Hit “Reset Rules Cache” or click again.</span>`;
+        ruleText.innerHTML = `<span class="error">Couldn’t find a new balanced rule. Try again or “Reset Rules Cache”.</span>`;
         showCounts(0,0);
-        renderLists([],[]);
+        document.getElementById("byClass").innerHTML = "";
         return;
       }
 
       ruleText.textContent = chosen.label(chosenParams);
+
+      // Build a Set of allowed IDs for inline rendering
+      const allowedSet = new Set(part.allowed.map(i=>i.id));
       showCounts(part.allowed.length, part.banned.length);
-      renderLists(part.allowed, part.banned);
+      renderByClass(items, allowedSet);
     }
 
     // ----------------------------
@@ -616,12 +501,13 @@
     // ----------------------------
     document.getElementById("newRuleBtn").addEventListener("click", async ()=>{
       try{
-        document.getElementById("ruleText").textContent = "Finding a fresh, balanced rule…";
+        document.getElementById("ruleText").textContent = "Finding a balanced rule…";
         await generateRuleAndRender(window.__DATA_BUILDS || []);
       }catch(err){
         document.getElementById("ruleText").innerHTML = `<span class="error">Error: ${err.message}</span>`;
       }
     });
+
     document.getElementById("resetCacheBtn").addEventListener("click", ()=>{
       resetUsedRules();
       document.getElementById("cacheInfo").textContent = "Seen rules: 0";
