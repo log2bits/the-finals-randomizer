@@ -499,8 +499,9 @@
             ruleDisplay.style.display = 'block';
             ruleText.textContent = `✅ ALLOWED: ${currentRule.description}`;
             ruleStats.innerHTML = `
-                <strong>Allowed:</strong> ${allowedCounts.total} items | 
-                <strong>Banned:</strong> ${bannedCount} items<br>
+                <strong>✅ Allowed:</strong> ${allowedCounts.total} items | 
+                <strong>❌ Banned:</strong> ${bannedCount} items | 
+                <strong>📊 Total:</strong> ${totalCounts.total} items<br>
                 <em>Rule: Equipment ${currentRule.description.toLowerCase()}</em>
             `;
         }
