@@ -13,8 +13,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
             min-height: 100vh;
             padding: 20px;
         }
@@ -22,196 +22,189 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
-            color: white;
-            padding: 30px;
             text-align: center;
+            margin-bottom: 30px;
         }
 
         .header h1 {
-            font-size: 2.5em;
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .controls {
-            padding: 30px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .button-group {
             display: flex;
             gap: 15px;
             justify-content: center;
+            margin-bottom: 30px;
             flex-wrap: wrap;
         }
 
-        button {
-            background: linear-gradient(135deg, #4ecdc4, #44a08d);
-            color: white;
-            border: none;
+        .btn {
             padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
         }
 
-        button:hover {
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
         }
 
-        button:active {
-            transform: translateY(0);
+        .btn-secondary {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
         }
 
-        .reset-btn {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(116, 185, 255, 0.4);
         }
 
-        .current-rule {
-            background: #e3f2fd;
-            border: 2px solid #2196f3;
-            border-radius: 10px;
+        .btn-danger {
+            background: linear-gradient(45deg, #636e72, #2d3436);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+        }
+
+        .rule-display {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             padding: 20px;
-            margin: 20px 0;
+            margin-bottom: 30px;
             text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .rule-text {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #1976d2;
+            font-size: 1.5rem;
+            font-weight: bold;
             margin-bottom: 10px;
         }
 
         .rule-stats {
-            font-size: 0.9em;
-            color: #666;
+            font-size: 1rem;
+            opacity: 0.9;
         }
 
         .equipment-grid {
-            padding: 30px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 25px;
+            margin-bottom: 30px;
         }
 
         .class-section {
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .class-title {
-            font-size: 1.4em;
-            font-weight: 700;
-            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: bold;
             margin-bottom: 15px;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
+            color: #ffd700;
+            text-transform: uppercase;
         }
 
         .equipment-category {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .category-title {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #34495e;
+            font-size: 1rem;
+            font-weight: bold;
             margin-bottom: 8px;
+            color: #74b9ff;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .equipment-list {
             display: flex;
-            flex-direction: column;
-            gap: 5px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .equipment-item {
-            padding: 8px 12px;
+            padding: 6px 12px;
             border-radius: 6px;
+            font-size: 0.9rem;
             font-weight: 500;
-            transition: all 0.2s ease;
         }
 
-        .equipment-item.allowed {
-            background: #d4edda;
-            color: #155724;
-            border-left: 4px solid #28a745;
+        .equipment-allowed {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid rgba(0, 255, 0, 0.4);
+            color: #90EE90;
         }
 
-        .equipment-item.banned {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid #dc3545;
-            opacity: 0.6;
+        .equipment-banned {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.4);
+            color: #FFB6C1;
             text-decoration: line-through;
-        }
-
-        .cache-info {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 30px;
-            font-size: 0.9em;
+            opacity: 0.7;
         }
 
         .loading {
             text-align: center;
-            padding: 50px;
-            font-size: 1.2em;
-            color: #666;
+            font-size: 1.2rem;
+            margin: 50px 0;
         }
 
         .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 20px;
-            margin: 20px;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
             border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
             text-align: center;
+        }
+
+        .cache-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
 
         @media (max-width: 768px) {
             .header h1 {
-                font-size: 2em;
+                font-size: 2rem;
             }
             
-            .equipment-grid {
-                grid-template-columns: 1fr;
-                padding: 20px;
-            }
-            
-            .button-group {
+            .controls {
                 flex-direction: column;
                 align-items: center;
             }
             
-            button {
-                width: 200px;
+            .equipment-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -219,406 +212,369 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎮 The Finals Equipment Randomizer</h1>
-            <p>Generate unique equipment rules for each game!</p>
+            <h1>🎯 The Finals Equipment Randomizer</h1>
+            <p>Generate simple rules to create unique equipment restrictions for each game!</p>
         </div>
 
         <div class="controls">
-            <div class="button-group">
-                <button onclick="generateNewRule()">🎲 Generate New Rule</button>
-                <button onclick="resetCache()" class="reset-btn">🔄 Reset Rule Cache</button>
-            </div>
+            <button class="btn btn-primary" onclick="generateNewRule()">🎲 Generate New Rule</button>
+            <button class="btn btn-secondary" onclick="toggleView()">👁️ Toggle View</button>
+            <button class="btn btn-danger" onclick="resetCache()">🗑️ Reset Cache</button>
         </div>
 
-        <div id="ruleDisplay"></div>
-        <div id="cacheInfo"></div>
-        <div id="equipmentDisplay">
-            <div class="loading">Loading equipment data...</div>
+        <div class="cache-info" id="cacheInfo">
+            Loading...
         </div>
+
+        <div class="rule-display" id="ruleDisplay" style="display: none;">
+            <div class="rule-text" id="ruleText">Generate a rule to get started!</div>
+            <div class="rule-stats" id="ruleStats"></div>
+        </div>
+
+        <div id="equipmentDisplay"></div>
     </div>
 
     <script>
-        // Equipment data and state
-        let equipmentData = null;
+        let gameData = null;
         let currentRule = null;
-        let usedRules = JSON.parse(localStorage.getItem('usedRules') || '[]');
+        let filteredData = null;
+        let showBanned = false;
 
-        // Rule system - easily expandable
-        const ruleTemplates = [
+        // Rule definitions - easy to understand and apply quickly
+        const rules = [
             {
-                id: 'contains_letter',
-                generateRule: () => {
-                    const letters = 'aeiourstlnhdcmfgpbwyvkjxqz'.split('');
-                    const letter = letters[Math.floor(Math.random() * letters.length)];
-                    return {
-                        description: `Contains the letter "${letter.toUpperCase()}"`,
-                        test: (name) => {
-                            if (typeof name !== 'string') return false;
-                            return name.toLowerCase().includes(letter);
-                        },
-                        ruleString: `contains_${letter}`
-                    };
-                }
+                name: "Contains vowel 'A'",
+                test: (name) => name.toLowerCase().includes('a'),
+                description: "Equipment names containing the letter 'A'"
             },
             {
-                id: 'not_contains_letter',
-                generateRule: () => {
-                    const letters = 'aeiourstlnhdcmfgpbwyvkjxqz'.split('');
-                    const letter = letters[Math.floor(Math.random() * letters.length)];
-                    return {
-                        description: `Does NOT contain the letter "${letter.toUpperCase()}"`,
-                        test: (name) => {
-                            if (typeof name !== 'string') return false;
-                            return !name.toLowerCase().includes(letter);
-                        },
-                        ruleString: `not_contains_${letter}`
-                    };
-                }
+                name: "Contains vowel 'E'",
+                test: (name) => name.toLowerCase().includes('e'),
+                description: "Equipment names containing the letter 'E'"
             },
             {
-                id: 'starts_with',
-                generateRule: () => {
-                    const letters = 'abcdefghijklmnoprstuvwxy'.split('');
-                    const letter = letters[Math.floor(Math.random() * letters.length)];
-                    return {
-                        description: `Starts with "${letter.toUpperCase()}"`,
-                        test: (name) => {
-                            if (typeof name !== 'string') return false;
-                            return name.toLowerCase().startsWith(letter);
-                        },
-                        ruleString: `starts_${letter}`
-                    };
-                }
+                name: "Contains vowel 'I'",
+                test: (name) => name.toLowerCase().includes('i'),
+                description: "Equipment names containing the letter 'I'"
             },
             {
-                id: 'ends_with',
-                generateRule: () => {
-                    const letters = 'aeiourstlnhdcmfgpbwyvkjxqz'.split('');
-                    const letter = letters[Math.floor(Math.random() * letters.length)];
-                    return {
-                        description: `Ends with "${letter.toUpperCase()}"`,
-                        test: (name) => {
-                            if (typeof name !== 'string') return false;
-                            return name.toLowerCase().endsWith(letter);
-                        },
-                        ruleString: `ends_${letter}`
-                    };
-                }
+                name: "Contains vowel 'O'",
+                test: (name) => name.toLowerCase().includes('o'),
+                description: "Equipment names containing the letter 'O'"
             },
             {
-                id: 'contains_number',
-                generateRule: () => ({
-                    description: 'Contains a number',
-                    test: (name) => {
-                        if (typeof name !== 'string') return false;
-                        return /\d/.test(name);
-                    },
-                    ruleString: 'contains_number'
-                })
+                name: "Contains vowel 'U'",
+                test: (name) => name.toLowerCase().includes('u'),
+                description: "Equipment names containing the letter 'U'"
             },
             {
-                id: 'no_numbers',
-                generateRule: () => ({
-                    description: 'Contains NO numbers',
-                    test: (name) => {
-                        if (typeof name !== 'string') return false;
-                        return !/\d/.test(name);
-                    },
-                    ruleString: 'no_numbers'
-                })
+                name: "Contains letter 'R'",
+                test: (name) => name.toLowerCase().includes('r'),
+                description: "Equipment names containing the letter 'R'"
             },
             {
-                id: 'has_dash',
-                generateRule: () => ({
-                    description: 'Contains a dash (-)',
-                    test: (name) => {
-                        if (typeof name !== 'string') return false;
-                        return name.includes('-');
-                    },
-                    ruleString: 'has_dash'
-                })
+                name: "Contains letter 'S'",
+                test: (name) => name.toLowerCase().includes('s'),
+                description: "Equipment names containing the letter 'S'"
             },
             {
-                id: 'no_dash',
-                generateRule: () => ({
-                    description: 'Does NOT contain a dash (-)',
-                    test: (name) => {
-                        if (typeof name !== 'string') return false;
-                        return !name.includes('-');
-                    },
-                    ruleString: 'no_dash'
-                })
+                name: "Contains letter 'T'",
+                test: (name) => name.toLowerCase().includes('t'),
+                description: "Equipment names containing the letter 'T'"
             },
             {
-                id: 'has_space',
-                generateRule: () => ({
-                    description: 'Contains a space',
-                    test: (name) => {
-                        if (typeof name !== 'string') return false;
-                        return name.includes(' ');
-                    },
-                    ruleString: 'has_space'
-                })
+                name: "Contains letter 'N'",
+                test: (name) => name.toLowerCase().includes('n'),
+                description: "Equipment names containing the letter 'N'"
             },
             {
-                id: 'no_space',
-                generateRule: () => ({
-                    description: 'Does NOT contain a space',
-                    test: (name) => {
-                        if (typeof name !== 'string') return false;
-                        return !name.includes(' ');
-                    },
-                    ruleString: 'no_space'
-                })
+                name: "Contains letter 'L'",
+                test: (name) => name.toLowerCase().includes('l'),
+                description: "Equipment names containing the letter 'L'"
             },
             {
-                id: 'odd_words',
-                generateRule: () => ({
-                    description: 'Has an ODD number of words',
-                    test: (name) => {
-                        if (typeof name !== 'string') return false;
-                        return name.split(' ').length % 2 === 1;
-                    },
-                    ruleString: 'odd_words'
-                })
+                name: "Contains numbers",
+                test: (name) => /\d/.test(name),
+                description: "Equipment names containing any numbers"
             },
             {
-                id: 'even_words',
-                generateRule: () => ({
-                    description: 'Has an EVEN number of words',
-                    test: (name) => {
-                        if (typeof name !== 'string') return false;
-                        return name.split(' ').length % 2 === 0;
-                    },
-                    ruleString: 'even_words'
-                })
+                name: "Contains dash or hyphen",
+                test: (name) => name.includes('-'),
+                description: "Equipment names containing a dash (-)"
             },
             {
-                id: 'contains_double_letter',
-                generateRule: () => ({
-                    description: 'Contains a double letter (like "aa", "bb", etc.)',
-                    test: (name) => {
-                        if (typeof name !== 'string') return false;
-                        return /(.)\1/.test(name.toLowerCase());
-                    },
-                    ruleString: 'double_letter'
-                })
+                name: "Contains space",
+                test: (name) => name.includes(' '),
+                description: "Equipment names containing a space"
             },
             {
-                id: 'vowel_start',
-                generateRule: () => ({
-                    description: 'Starts with a vowel (A, E, I, O, U)',
-                    test: (name) => {
-                        if (typeof name !== 'string' || name.length === 0) return false;
-                        return 'aeiou'.includes(name.toLowerCase()[0]);
-                    },
-                    ruleString: 'vowel_start'
-                })
+                name: "Starts with vowel",
+                test: (name) => /^[aeiouAEIOU]/.test(name),
+                description: "Equipment names starting with a vowel (A, E, I, O, U)"
             },
             {
-                id: 'consonant_start',
-                generateRule: () => ({
-                    description: 'Starts with a consonant',
-                    test: (name) => {
-                        if (typeof name !== 'string' || name.length === 0) return false;
-                        return !'aeiou'.includes(name.toLowerCase()[0]);
-                    },
-                    ruleString: 'consonant_start'
-                })
+                name: "Starts with consonant",
+                test: (name) => /^[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]/.test(name),
+                description: "Equipment names starting with a consonant"
+            },
+            {
+                name: "Ends with vowel",
+                test: (name) => /[aeiouAEIOU]$/.test(name),
+                description: "Equipment names ending with a vowel (A, E, I, O, U)"
+            },
+            {
+                name: "Ends with consonant",
+                test: (name) => /[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]$/.test(name),
+                description: "Equipment names ending with a consonant"
+            },
+            {
+                name: "Single word",
+                test: (name) => !name.includes(' ') && !name.includes('-'),
+                description: "Equipment names that are a single word (no spaces or dashes)"
+            },
+            {
+                name: "Multiple words",
+                test: (name) => name.includes(' ') || name.includes('-'),
+                description: "Equipment names with multiple words (contains spaces or dashes)"
+            },
+            {
+                name: "Contains double letters",
+                test: (name) => /(.)\1/.test(name.toLowerCase()),
+                description: "Equipment names with repeated letters (like 'tt', 'ee', etc.)"
             }
         ];
 
-        // Load equipment data
-        async function loadEquipmentData() {
-            try {
-                const response = await fetch('https://raw.githubusercontent.com/log2bits/the-finals-randomizer/refs/heads/main/data.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                equipmentData = await response.json();
-                console.log('Equipment data loaded:', equipmentData);
-                
-                // Generate initial rule if none exists
-                if (!currentRule) {
-                    generateNewRule();
-                } else {
-                    displayEquipment();
-                }
-            } catch (error) {
-                console.error('Error loading equipment data:', error);
-                document.getElementById('equipmentDisplay').innerHTML = 
-                    `<div class="error">Failed to load equipment data: ${error.message}</div>`;
+        // Cache management
+        function getUsedRules() {
+            const cached = localStorage.getItem('finalsEquipmentRules');
+            return cached ? JSON.parse(cached) : [];
+        }
+
+        function addUsedRule(ruleName) {
+            const usedRules = getUsedRules();
+            if (!usedRules.includes(ruleName)) {
+                usedRules.push(ruleName);
+                localStorage.setItem('finalsEquipmentRules', JSON.stringify(usedRules));
             }
         }
 
-        // Check if rule meets minimum requirements
-        function checkRuleRequirements(rule) {
-            if (!equipmentData) return false;
+        function resetCache() {
+            localStorage.removeItem('finalsEquipmentRules');
+            updateCacheInfo();
+            alert('Cache reset! All rules are now available again.');
+        }
 
-            const results = { allowed: [], banned: [] };
-            let classRequirements = {};
+        function updateCacheInfo() {
+            const usedRules = getUsedRules();
+            const cacheInfo = document.getElementById('cacheInfo');
+            cacheInfo.textContent = `Rules used: ${usedRules.length}/${rules.length} | Remaining: ${rules.length - usedRules.length}`;
+        }
 
-            // Process all equipment
-            Object.entries(equipmentData).forEach(([className, classData]) => {
-                classRequirements[className] = {
-                    specializations: { allowed: 0, total: 0 },
-                    weapons: { allowed: 0, total: 0 },
-                    gadgets: { allowed: 0, total: 0 }
-                };
+        // Load game data
+        async function loadGameData() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/log2bits/the-finals-randomizer/refs/heads/main/data.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                gameData = await response.json();
+                updateCacheInfo();
+            } catch (error) {
+                console.error('Error loading game data:', error);
+                document.getElementById('equipmentDisplay').innerHTML = 
+                    '<div class="error">Failed to load game data. Please check your internet connection and try again.</div>';
+            }
+        }
 
-                Object.entries(classData).forEach(([category, items]) => {
-                    if (!Array.isArray(items)) return;
-                    
-                    items.forEach(item => {
-                        const allowed = rule.test(item);
-                        if (allowed) {
-                            results.allowed.push(item);
-                            classRequirements[className][category].allowed++;
-                        } else {
-                            results.banned.push(item);
-                        }
-                        classRequirements[className][category].total++;
-                    });
-                });
-            });
-
-            // Check minimum requirements
-            const totalAllowed = results.allowed.length;
-            const totalBanned = results.banned.length;
+        // Count equipment by category
+        function countEquipment(data) {
+            let total = 0;
+            const counts = { specializations: {}, gadgets: {}, weapons: {} };
             
-            if (totalAllowed < 25 || totalBanned < 25) {
-                return false;
-            }
+            data.forEach(buildData => {
+                const buildName = buildData.build.name;
+                
+                counts.specializations[buildName] = buildData.specializations.length;
+                counts.gadgets[buildName] = buildData.gadgets.length;
+                counts.weapons[buildName] = buildData.weapons.length;
+                
+                total += buildData.specializations.length + buildData.gadgets.length + buildData.weapons.length;
+            });
+            
+            return { total, counts };
+        }
 
-            // Check class requirements
-            for (const [className, requirements] of Object.entries(classRequirements)) {
-                if (requirements.specializations.allowed < 1 && requirements.specializations.total > 0) return false;
-                if (requirements.weapons.allowed < 1 && requirements.weapons.total > 0) return false;
-                if (requirements.gadgets.allowed < 3 && requirements.gadgets.total > 0) return false;
-            }
+        // Check if rule meets minimum requirements
+        function validateRule(rule, data) {
+            const filtered = filterData(rule, data);
+            const counts = countEquipment(filtered);
+            
+            // Check minimum requirements
+            const minSpecializations = Object.values(counts.counts.specializations).every(count => count >= 1);
+            const minGadgets = Object.values(counts.counts.gadgets).every(count => count >= 3);
+            const minWeapons = Object.values(counts.counts.weapons).every(count => count >= 1);
+            
+            return {
+                valid: minSpecializations && minGadgets && minWeapons && counts.total >= 25,
+                counts: counts,
+                issues: {
+                    specializations: !minSpecializations,
+                    gadgets: !minGadgets,
+                    weapons: !minWeapons,
+                    total: counts.total < 25
+                }
+            };
+        }
 
-            return { valid: true, allowed: totalAllowed, banned: totalBanned };
+        // Filter data based on rule
+        function filterData(rule, data) {
+            return data.map(buildData => ({
+                ...buildData,
+                specializations: buildData.specializations.filter(item => rule.test(item.name)),
+                gadgets: buildData.gadgets.filter(item => rule.test(item.name)),
+                weapons: buildData.weapons.filter(item => rule.test(item.name))
+            }));
         }
 
         // Generate a new rule
         function generateNewRule() {
-            if (!equipmentData) {
-                loadEquipmentData();
+            if (!gameData) {
+                alert('Game data not loaded yet. Please wait a moment and try again.');
+                return;
+            }
+
+            const usedRules = getUsedRules();
+            const availableRules = rules.filter(rule => !usedRules.includes(rule.name));
+            
+            if (availableRules.length === 0) {
+                alert('All rules have been used! Reset the cache to use rules again.');
                 return;
             }
 
             let attempts = 0;
-            const maxAttempts = 100;
-
-            while (attempts < maxAttempts) {
-                const template = ruleTemplates[Math.floor(Math.random() * ruleTemplates.length)];
-                const rule = template.generateRule();
+            let validRule = null;
+            
+            // Try to find a valid rule (max 50 attempts)
+            while (attempts < 50 && !validRule) {
+                const randomRule = availableRules[Math.floor(Math.random() * availableRules.length)];
+                const validation = validateRule(randomRule, gameData);
                 
-                // Check if this rule has been used
-                if (usedRules.includes(rule.ruleString)) {
-                    attempts++;
-                    continue;
+                if (validation.valid) {
+                    validRule = randomRule;
+                } else {
+                    // Remove invalid rule from available rules for this session
+                    const index = availableRules.indexOf(randomRule);
+                    availableRules.splice(index, 1);
                 }
-
-                // Check if rule meets requirements
-                const requirements = checkRuleRequirements(rule);
-                if (requirements && requirements.valid) {
-                    currentRule = rule;
-                    usedRules.push(rule.ruleString);
-                    localStorage.setItem('usedRules', JSON.stringify(usedRules));
-                    
-                    displayRule(requirements);
-                    displayEquipment();
-                    updateCacheInfo();
-                    return;
-                }
-
+                
                 attempts++;
             }
 
-            // If we can't find a valid unused rule, reset cache and try again
-            if (usedRules.length > 0) {
-                resetCache();
-                generateNewRule();
-            } else {
-                alert('Unable to generate a valid rule. Please check the equipment data.');
+            if (!validRule) {
+                alert('Could not find a valid rule that meets minimum requirements. Try resetting the cache.');
+                return;
             }
+
+            currentRule = validRule;
+            addUsedRule(validRule.name);
+            updateCacheInfo();
+            
+            filteredData = filterData(validRule, gameData);
+            displayRule();
+            displayEquipment();
         }
 
         // Display current rule
-        function displayRule(stats) {
+        function displayRule() {
+            if (!currentRule || !filteredData) return;
+            
             const ruleDisplay = document.getElementById('ruleDisplay');
-            ruleDisplay.innerHTML = `
-                <div class="current-rule">
-                    <div class="rule-text">ALLOWED: ${currentRule.description}</div>
-                    <div class="rule-stats">${stats.allowed} items allowed • ${stats.banned} items banned</div>
-                </div>
+            const ruleText = document.getElementById('ruleText');
+            const ruleStats = document.getElementById('ruleStats');
+            
+            const allowedCounts = countEquipment(filteredData);
+            const totalCounts = countEquipment(gameData);
+            const bannedCount = totalCounts.total - allowedCounts.total;
+            
+            ruleDisplay.style.display = 'block';
+            ruleText.textContent = `✅ ALLOWED: ${currentRule.description}`;
+            ruleStats.innerHTML = `
+                <strong>Allowed:</strong> ${allowedCounts.total} items | 
+                <strong>Banned:</strong> ${bannedCount} items<br>
+                <em>Rule: Equipment ${currentRule.description.toLowerCase()}</em>
             `;
         }
 
         // Display equipment
         function displayEquipment() {
-            if (!equipmentData || !currentRule) return;
-
-            const equipmentDisplay = document.getElementById('equipmentDisplay');
-            let html = '<div class="equipment-grid">';
-
-            Object.entries(equipmentData).forEach(([className, classData]) => {
+            if (!filteredData || !gameData) return;
+            
+            const container = document.getElementById('equipmentDisplay');
+            let html = '';
+            
+            filteredData.forEach((buildData, index) => {
+                const originalBuildData = gameData[index];
+                
                 html += `
                     <div class="class-section">
-                        <div class="class-title">${className.toUpperCase()}</div>
-                `;
-
-                Object.entries(classData).forEach(([category, items]) => {
-                    if (!Array.isArray(items)) return;
-                    
-                    html += `
+                        <div class="class-title">${buildData.build.name}</div>
+                        
                         <div class="equipment-category">
-                            <div class="category-title">${category}</div>
+                            <div class="category-title">Specializations</div>
                             <div class="equipment-list">
-                    `;
-
-                    items.forEach(item => {
-                        const allowed = currentRule.test(item);
-                        const cssClass = allowed ? 'allowed' : 'banned';
-                        html += `<div class="equipment-item ${cssClass}">${item}</div>`;
-                    });
-
-                    html += '</div></div>';
-                });
-
-                html += '</div>';
+                                ${renderEquipmentItems(buildData.specializations, originalBuildData.specializations)}
+                            </div>
+                        </div>
+                        
+                        <div class="equipment-category">
+                            <div class="category-title">Gadgets</div>
+                            <div class="equipment-list">
+                                ${renderEquipmentItems(buildData.gadgets, originalBuildData.gadgets)}
+                            </div>
+                        </div>
+                        
+                        <div class="equipment-category">
+                            <div class="category-title">Weapons</div>
+                            <div class="equipment-list">
+                                ${renderEquipmentItems(buildData.weapons, originalBuildData.weapons)}
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
-
-            html += '</div>';
-            equipmentDisplay.innerHTML = html;
+            
+            container.innerHTML = html;
         }
 
-        // Update cache information
-        function updateCacheInfo() {
-            const cacheInfo = document.getElementById('cacheInfo');
-            const totalRules = ruleTemplates.length * 2; // Rough estimate
-            cacheInfo.innerHTML = `
-                <div class="cache-info">
-                    📝 Used ${usedRules.length} rules this session. 
-                    Rules are cached to prevent duplicates until reset.
-                </div>
-            `;
+        // Render equipment items
+        function renderEquipmentItems(allowedItems, allItems) {
+            let html = '';
+            const allowedIds = allowedItems.map(item => item.id);
+            
+            allItems.forEach(item => {
+                const isAllowed = allowedIds.includes(item.id);
+                const shouldShow = showBanned || isAllowed;
+                
+                if (shouldShow) {
+                    const className = isAllowed ? 'equipment-allowed' : 'equipment-banned';
+                    html += `<span class="equipment-item ${className}">${item.name}</span>`;
+                }
+            });
+            
+            return html;
         }
 
-        // Reset cache
-        function resetCache() {
-            usedRules = [];
-            localStorage.removeItem('usedRules');
-            updateCacheInfo();
-            alert('Rule cache has been reset! All rules are now available again.');
+        // Toggle between showing only allowed items vs all items
+        function toggleView() {
+            showBanned = !showBanned;
+            displayEquipment();
+            
+            const button = document.querySelector('.btn-secondary');
+            button.textContent = showBanned ? '👁️ Show Allowed Only' : '👁️ Show All Items';
         }
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            loadEquipmentData();
-            updateCacheInfo();
-        });
+        // Initialize the application
+        loadGameData();
     </script>
 </body>
 </html>
