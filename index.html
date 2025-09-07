@@ -2,48 +2,76 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>The Finals Equipment Randomizer — Fast Rules</title>
+  <title>The Finals Equipment Randomizer — Final Version</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    :root { --bg:#0b0b10; --card:#141420; --muted:#8b8ba0; --text:#e8e8ee; --ok:#7ce38b; --bad:#f7768e; --border:#1d1d2b; }
+    :root {
+      --bg:#0b0b10; --card:#141420; --muted:#8b8ba0; --text:#e8e8ee;
+      --ok:#7ce38b; --bad:#f7768e; --border:#1d1d2b; --accent:#7aa2f7;
+    }
     * { box-sizing: border-box; }
-    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, "Helvetica Neue", Arial; background: var(--bg); color: var(--text);}
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial; background: var(--bg); color: var(--text);}
     header { padding: 16px 20px; display:flex; gap:12px; align-items:center; justify-content:space-between; border-bottom:1px solid #1e1e2a;}
-    h1 { margin:0; font-size: clamp(18px, 3vw, 22px); letter-spacing: .2px; }
-    .actions { display:flex; gap:10px; flex-wrap:wrap; }
-    button { background: var(--card); border:1px solid #24243a; color: var(--text); padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600; transition: .15s transform ease, .15s background ease; }
+    h1 { margin:0; font-size: clamp(18px, 3vw, 22px); letter-spacing:.2px; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    button {
+      background: var(--card); border:1px solid #24243a; color: var(--text);
+      padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600;
+      transition: .15s transform ease, .15s background ease, .15s opacity ease;
+    }
     button:hover { transform: translateY(-1px); background:#1a1a2b; }
     button.secondary { background:transparent; }
+    button:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+    .share {
+      display:flex; gap:8px; align-items:center; background:#0f0f17; border:1px solid #23233a;
+      border-radius:12px; padding:6px 10px;
+    }
+    .share input {
+      width: 320px; max-width: 52vw; background:transparent; color:var(--text);
+      border:none; outline:none; font-size:12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
     main { padding: 18px; max-width: 1200px; margin: 0 auto; display: grid; gap: 18px; }
     .row { display:grid; grid-template-columns: 1.2fr .8fr; gap:18px; }
     @media (max-width: 900px){ .row{ grid-template-columns:1fr; } }
     .card { background: var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; }
-    .title { font-weight:700; margin: 0 0 8px; font-size: 18px; }
-    .muted { color: var(--muted); font-size: 13px; }
-    .rule { font-size: 16px; margin: 6px 0 10px; }
+    .title { font-weight:700; margin:0 0 8px; font-size:18px; }
+    .muted { color: var(--muted); font-size:13px; }
+    .rule { font-size:16px; margin:6px 0 10px; }
     .counts { display:flex; gap:12px; flex-wrap:wrap; }
-    .pill { border:1px solid #2a2a40; padding:6px 10px; border-radius:999px; font-size: 12px; }
+    .pill { border:1px solid #2a2a40; padding:6px 10px; border-radius:999px; font-size:12px; }
     .pill.ok { border-color:#2c4632; color: var(--ok);}
     .pill.bad { border-color:#51303a; color: var(--bad);}
     .grid { display:grid; gap:12px; grid-template-columns: repeat(3, 1fr); }
     @media (max-width: 900px){ .grid{ grid-template-columns:1fr; } }
-    .group h3 { margin:0 0 8px; font-size: 16px; }
+    .group h3 { margin:0 0 8px; font-size:16px; }
     .cols { display:grid; gap:12px; grid-template-columns: 1fr 1fr 1fr; }
     @media (max-width: 800px){ .cols{ grid-template-columns:1fr; } }
     .subhead { color: var(--muted); font-size:12px; margin-bottom:6px; }
     ul { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
-    li { background:#11111a; border:1px solid #1f1f30; padding:6px 8px; border-radius:10px; font-size: 13px; display:flex; align-items:center; justify-content:space-between; }
+    li {
+      background:#11111a; border:1px solid #1f1f30; padding:6px 8px; border-radius:10px;
+      font-size:13px; display:flex; align-items:center; justify-content:space-between;
+    }
     .banned { color: var(--bad); text-decoration: line-through; opacity:.95; border-color:#3a1f26; background:#130d10; }
     .id { color:#7f7fa0; font-size:11px; }
-    .small { font-size: 12px; }
+    .small { font-size:12px; }
+    .status { min-height: 18px; }
+    .kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background:#0f0f17; border:1px solid #29293d; border-radius:6px; padding:2px 6px; font-size:11px;
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>THE FINALS — Rule-Based Equipment Randomizer</h1>
     <div class="actions">
-      <button id="newRuleBtn">Generate New Rule</button>
-      <button id="resetCacheBtn" class="secondary">Reset Rules Cache</button>
+      <button id="newRuleBtn">New Balanced Rule</button>
+      <button id="resetCacheBtn" class="secondary">Reset Cache</button>
+      <div class="share" title="Share this exact rule with friends">
+        <input id="shareUrl" readonly aria-label="Permalink for this rule" />
+        <button id="copyLinkBtn" title="Copy link">Copy Link</button>
+      </div>
     </div>
   </header>
 
@@ -58,14 +86,16 @@
           <span id="cacheInfo" class="pill">Seen rules: –</span>
         </div>
         <div class="muted small" style="margin-top:8px;">
-          Constraints: <b>Allowed ≥ 15</b>, <b>Banned ≥ 25</b>, <b>≥1 weapon allowed overall</b>.
+          Constraints: <b>Allowed ≥ 15</b>, <b>Banned ≥ 25</b>, <b>≥1 weapon allowed</b>. No per-class minimums.
         </div>
+        <div id="status" class="status small" aria-live="polite"></div>
       </section>
 
       <section class="card">
-        <div class="title">Notes</div>
+        <div class="title">How to use</div>
         <p class="muted small">
-          Rules are human-fast: single letters, ≤2-letter sets, starts/ends, digits, symbols, bigrams, plus a few simple AND-combos (no word rules). Unused rules are cached in your browser and skipped automatically.
+          The rule is designed to be instant to evaluate (letters, ≤2-letter sets, starts/ends, digits, symbols, bigrams, or simple AND combos).
+          Click <span class="kbd">New Balanced Rule</span> for a fresh configuration. Use <span class="kbd">Copy Link</span> to share the exact same rule.
         </p>
       </section>
     </div>
@@ -78,12 +108,12 @@
 
   <script>
     // ----------------------------
-    // Config
+    // Configuration
     // ----------------------------
     const DATA_URL = "https://raw.githubusercontent.com/log2bits/the-finals-randomizer/refs/heads/main/data.json";
-    const USED_RULES_KEY = "tfr_used_rules_v4";
+    const USED_RULES_KEY = "tfr_used_rules_final_v1";
 
-    const MAX_RULE_ATTEMPTS = 1500;
+    const MAX_RULE_ATTEMPTS = 2000;
     const MIN_ALLOWED = 15;
     const MIN_BANNED  = 25;
     const REQUIRE_AT_LEAST_ONE_WEAPON = true;
@@ -92,12 +122,11 @@
     const DIGITS  = ["0","1","2","3","4","5","6","7","8","9"];
 
     // ----------------------------
-    // Utils
+    // Utilities
     // ----------------------------
     const rng = () => crypto.getRandomValues(new Uint32Array(1))[0] / 2**32;
     const sample = arr => arr[Math.floor(rng()*arr.length)];
     const shuffle = arr => arr.map(v=>[v, rng()]).sort((a,b)=>a[1]-b[1]).map(x=>x[0]);
-    const unique = arr => Array.from(new Set(arr));
     const toKey = v => typeof v === "string" ? v : JSON.stringify(v);
 
     function kCombinations(arr, k){
@@ -111,16 +140,44 @@
       return res;
     }
 
-    function loadUsedRules(){ try { return new Set(JSON.parse(localStorage.getItem(USED_RULES_KEY) || "[]")); } catch { return new Set(); } }
-    function saveUsedRules(set){ localStorage.setItem(USED_RULES_KEY, JSON.stringify(Array.from(set))); }
+    function loadUsedRules(){
+      try { return new Set(JSON.parse(localStorage.getItem(USED_RULES_KEY) || "[]")); }
+      catch { return new Set(); }
+    }
+    function saveUsedRules(set){
+      localStorage.setItem(USED_RULES_KEY, JSON.stringify(Array.from(set)));
+    }
     function resetUsedRules(){ localStorage.removeItem(USED_RULES_KEY); }
 
     // ----------------------------
-    // Fetch / shape data
+    // URL encoding / decoding (permalinks)
+    // ----------------------------
+    function encodeRuleToUrl(ruleId, params){
+      const data = { id: ruleId, params };
+      const encoded = encodeURIComponent(JSON.stringify(data));
+      const newHash = `#rule=${encoded}`;
+      if(location.hash !== newHash){
+        history.replaceState(null, "", newHash);
+      }
+      // update share box
+      document.getElementById("shareUrl").value = location.href;
+    }
+    function decodeRuleFromUrl(){
+      if(!location.hash.startsWith("#rule=")) return null;
+      try {
+        const raw = decodeURIComponent(location.hash.slice(6));
+        const parsed = JSON.parse(raw);
+        if(parsed && typeof parsed.id === "string") return parsed;
+      } catch {}
+      return null;
+    }
+
+    // ----------------------------
+    // Data shaping
     // ----------------------------
     async function fetchData(){
       const res = await fetch(DATA_URL, {cache:"no-store"});
-      if(!res.ok) throw new Error("Failed to fetch data.json from GitHub");
+      if(!res.ok) throw new Error("Failed to fetch data.json");
       return await res.json();
     }
 
@@ -136,18 +193,7 @@
       }
       return out;
     }
-    function groupByBuildAndCategory(items){
-      const map = {};
-      for(const it of items){
-        map[it.buildName] ??= { specialization:[], gadget:[], weapon:[] };
-        map[it.buildName][it.category].push(it);
-      }
-      return map;
-    }
 
-    // ----------------------------
-    // Stats (letters & bigrams)
-    // ----------------------------
     function makeLetterStats(items){
       const counts = {};
       const total = items.length;
@@ -186,11 +232,11 @@
         const allowed = (mode === "include") ? c : (total - c);
         return { token, allowed, score: Math.abs(allowed - total/2) };
       }).sort((a,b)=> a.score - b.score);
-      return scored.slice(0, 36).map(s=>s.token); // generous slice for variety
+      return scored.slice(0, 40).map(s=>s.token); // generous for variety
     }
 
     // ----------------------------
-    // Quick checks (human-easy)
+    // Quick checks (human-fast)
     // ----------------------------
     const hasAny = (s, arr) => {
       const t = s.toLowerCase();
@@ -200,21 +246,20 @@
     const hasSpace = s => s.includes(" ");
     const singleWord = s => !hasSpace(s.trim());
     const startsWith = (s, ch) => s.trim().toLowerCase().startsWith(ch);
-    const endsWith = (s, ch) => s.trim().toLowerCase().endsWith(ch);
+    const endsWith   = (s, ch) => s.trim().toLowerCase().endsWith(ch);
     const startsWithVowel = s => /^[aeiou]/i.test(s.trim());
-    const endsWithVowel = s => /[aeiou]$/i.test(s.trim());
+    const endsWithVowel   = s => /[aeiou]$/i.test(s.trim());
     const startsWithConsonant = s => /^[^aeiou\W_]/i.test(s.trim());
-    const endsWithConsonant = s => /[^aeiou\W_]$/i.test(s.trim());
+    const endsWithConsonant   = s => /[^aeiou\W_]$/i.test(s.trim());
     const doubleChar = s => /(.)\1/.test(s.replace(/\s+/g,""));
 
-    // ----------------------------
-    // RULES (no keyword rules; letter sets ≤ 2)
-    // Each rule: { id, label(params), genParams(ctx), predicate(name, params) }
-    // ----------------------------
     function listPretty(arr){ return arr.map(x => x.length===1 ? x.toUpperCase() : x).join(", "); }
 
+    // ----------------------------
+    // Rule definitions (no word rules; letter sets ≤ 2)
+    // ----------------------------
     const BASE_RULES = [
-      // Letters (single include/exclude)
+      // Single letter include/exclude
       {
         id: "include_letter",
         label: p => `ALLOWED if the name contains “${p.toUpperCase()}”.`,
@@ -228,47 +273,27 @@
         predicate: (name, p) => !name.toLowerCase().includes(p),
       },
 
-      // Letter sets (any-of) — capped to size 2
+      // Any-of TWO letters (≤ 2 by design)
       {
         id: "include_any_two_letters",
-        label: set => `ALLOWED if the name has “${listPretty(set)}”.`,
-        genParams: ctx => shuffle(kCombinations(Object.keys(ctx.letterStats.counts),2)).slice(0,120),
+        label: set => `ALLOWED if the name has ${set.map(x=>x.toUpperCase()).join(" or ")}.`,
+        genParams: ctx => shuffle(kCombinations(Object.keys(ctx.letterStats.counts),2)).slice(0,150),
         predicate: (name, set) => hasAny(name, set),
       },
       {
         id: "exclude_any_two_letters",
-        label: set => `ALLOWED if the name has NONE of “${listPretty(set)}”.`,
-        genParams: ctx => shuffle(kCombinations(Object.keys(ctx.letterStats.counts),2)).slice(0,120),
+        label: set => `ALLOWED if the name has NONE of ${set.map(x=>x.toUpperCase()).join(" or ")}.`,
+        genParams: ctx => shuffle(kCombinations(Object.keys(ctx.letterStats.counts),2)).slice(0,150),
         predicate: (name, set) => excludesAll(name, set),
       },
 
-      // Starts / Ends with single letter (+ NOT variants)
-      {
-        id: "starts_with_letter",
-        label: ch => `ALLOWED if the name starts with “${ch.toUpperCase()}”.`,
-        genParams: ctx => Object.keys(ctx.letterStats.counts),
-        predicate: (name, ch) => startsWith(name, ch),
-      },
-      {
-        id: "not_starts_with_letter",
-        label: ch => `ALLOWED if the name does NOT start with “${ch.toUpperCase()}”.`,
-        genParams: ctx => Object.keys(ctx.letterStats.counts),
-        predicate: (name, ch) => !startsWith(name, ch),
-      },
-      {
-        id: "ends_with_letter",
-        label: ch => `ALLOWED if the name ends with “${ch.toUpperCase()}”.`,
-        genParams: ctx => Object.keys(ctx.letterStats.counts),
-        predicate: (name, ch) => endsWith(name, ch),
-      },
-      {
-        id: "not_ends_with_letter",
-        label: ch => `ALLOWED if the name does NOT end with “${ch.toUpperCase()}”.`,
-        genParams: ctx => Object.keys(ctx.letterStats.counts),
-        predicate: (name, ch) => !endsWith(name, ch),
-      },
+      // Starts/Ends with a specific letter (+ NOT variants)
+      { id:"starts_with_letter",     label: ch=>`ALLOWED if the name starts with “${ch.toUpperCase()}”.`, genParams:ctx=>Object.keys(ctx.letterStats.counts), predicate:(n,ch)=>startsWith(n,ch) },
+      { id:"not_starts_with_letter", label: ch=>`ALLOWED if the name does NOT start with “${ch.toUpperCase()}”.`, genParams:ctx=>Object.keys(ctx.letterStats.counts), predicate:(n,ch)=>!startsWith(n,ch) },
+      { id:"ends_with_letter",       label: ch=>`ALLOWED if the name ends with “${ch.toUpperCase()}”.`,   genParams:ctx=>Object.keys(ctx.letterStats.counts), predicate:(n,ch)=>endsWith(n,ch) },
+      { id:"not_ends_with_letter",   label: ch=>`ALLOWED if the name does NOT end with “${ch.toUpperCase()}”.`,   genParams:ctx=>Object.keys(ctx.letterStats.counts), predicate:(n,ch)=>!endsWith(n,ch) },
 
-      // Bigrams (letter pairs in sequence)
+      // Bigrams (letter pairs)
       {
         id: "include_bigram",
         label: p => `ALLOWED if the name contains the pair “${p}”.`,
@@ -282,53 +307,43 @@
         predicate: (name, p) => !name.toLowerCase().includes(p),
       },
 
-      // Digits / symbols (with small sets)
+      // Digits / Symbols (with 2-token subsets)
+      { id:"has_any_digit", label:()=> "ALLOWED if the name has any number (0–9).", genParams:()=>[true], predicate:(n)=>/\d/.test(n) },
       {
-        id: "has_any_digit",
-        label: () => "ALLOWED if the name has any number (0–9).",
-        genParams: () => [true],
-        predicate: (name) => /\d/.test(name),
+        id:"has_digits_subset_two",
+        label:set=>`ALLOWED if the name has ${set.join(" or ")}.`,
+        genParams:()=> shuffle(kCombinations(DIGITS,2)).slice(0,80),
+        predicate:(n,set)=> hasAny(n,set),
       },
+      { id:"has_any_symbol", label:()=>`ALLOWED if the name has any of: ${SYMBOLS.join(" ")}`, genParams:()=>[true], predicate:(n)=>SYMBOLS.some(sym=>n.includes(sym)) },
       {
-        id: "has_digits_subset_two",
-        label: set => `ALLOWED if the name has ${set.join(" or ")}.`,
-        genParams: () => shuffle(kCombinations(DIGITS,2)).slice(0,60),
-        predicate: (name, set) => hasAny(name, set),
-      },
-      {
-        id: "has_any_symbol",
-        label: () => `ALLOWED if the name has any of: ${SYMBOLS.join(" ")}`,
-        genParams: () => [true],
-        predicate: (name) => SYMBOLS.some(sym => name.includes(sym)),
-      },
-      {
-        id: "has_symbols_subset_two",
-        label: set => `ALLOWED if the name has ${set.join(" or ")}.`,
-        genParams: () => shuffle(kCombinations(SYMBOLS,2)).slice(0,40),
-        predicate: (name, set) => set.some(sym => name.includes(sym)),
+        id:"has_symbols_subset_two",
+        label:set=>`ALLOWED if the name has ${set.join(" or ")}.`,
+        genParams:()=> shuffle(kCombinations(SYMBOLS,2)).slice(0,60),
+        predicate:(n,set)=> set.some(sym=>n.includes(sym)),
       },
 
-      // Word form & simple patterns
-      { id: "single_word", label: () => "ALLOWED if the name is a single word.", genParams: () => [true], predicate: (name) => singleWord(name) },
-      { id: "multi_word",  label: () => "ALLOWED if the name has multiple words.", genParams: () => [true], predicate: (name) => hasSpace(name) },
-      { id: "starts_with_vowel", label: () => "ALLOWED if the name starts with a vowel.", genParams: () => [true], predicate: (name) => startsWithVowel(name) },
-      { id: "ends_with_vowel",   label: () => "ALLOWED if the name ends with a vowel.",   genParams: () => [true], predicate: (name) => endsWithVowel(name) },
-      { id: "starts_with_consonant", label: () => "ALLOWED if the name starts with a consonant.", genParams: () => [true], predicate: (name) => startsWithConsonant(name) },
-      { id: "ends_with_consonant",   label: () => "ALLOWED if the name ends with a consonant.",   genParams: () => [true], predicate: (name) => endsWithConsonant(name) },
-      { id: "double_char", label: () => "ALLOWED if the name has a double letter/number (ee, ll, 11).", genParams: () => [true], predicate: (name) => doubleChar(name) },
+      // Word form / simple patterns
+      { id:"single_word", label:()=> "ALLOWED if the name is a single word.", genParams:()=>[true], predicate:(n)=> singleWord(n) },
+      { id:"multi_word",  label:()=> "ALLOWED if the name has multiple words.", genParams:()=>[true], predicate:(n)=> hasSpace(n) },
+      { id:"starts_with_vowel", label:()=> "ALLOWED if the name starts with a vowel.", genParams:()=>[true], predicate:(n)=> startsWithVowel(n) },
+      { id:"ends_with_vowel",   label:()=> "ALLOWED if the name ends with a vowel.",   genParams:()=>[true], predicate:(n)=> endsWithVowel(n) },
+      { id:"starts_with_consonant", label:()=> "ALLOWED if the name starts with a consonant.", genParams:()=>[true], predicate:(n)=> startsWithConsonant(n) },
+      { id:"ends_with_consonant",   label:()=> "ALLOWED if the name ends with a consonant.",   genParams:()=>[true], predicate:(n)=> endsWithConsonant(n) },
+      { id:"double_char", label:()=> "ALLOWED if the name has a double letter/number (ee, ll, 11).", genParams:()=>[true], predicate:(n)=> doubleChar(n) },
     ];
 
-    // Simple AND-compound rules (still human-easy)
+    // Simple AND-compound rules (easy to evaluate)
     function compoundLabel(parts){ return "ALLOWED if " + parts.join(" AND "); }
     function compoundRule(id, labelBuilder, paramGen, predicate){ return { id, label: labelBuilder, genParams: paramGen, predicate }; }
 
     function buildCompoundRules(ctx){
       const letters = Object.keys(ctx.letterStats.counts);
-      const bigramsTop = pickNearHalfFrom(Array.from(ctx.bigramStats.counts.entries()), ctx.bigramStats.total, "include").slice(0, 24);
+      const topBigrams = pickNearHalfFrom(Array.from(ctx.bigramStats.counts.entries()), ctx.bigramStats.total, "include").slice(0, 28);
 
       const rules = [];
 
-      // A) Starts with vowel AND has a hyphen
+      // Starts with vowel AND has a hyphen
       rules.push(compoundRule(
         "starts_vowel_and_hyphen",
         () => compoundLabel(["the name starts with a vowel","it has a hyphen"]),
@@ -336,8 +351,8 @@
         (name) => startsWithVowel(name) && name.includes("-")
       ));
 
-      // B) Single word AND has digits (1 or 2)
-      const digitPairs = kCombinations(DIGITS.slice(0,3), 2); // 0–2 pairs like ["1","2"]
+      // Single word AND has digits pair (e.g., "1 or 2")
+      const digitPairs = kCombinations(DIGITS.slice(0,4), 2); // 0–3 pairs
       rules.push(compoundRule(
         "singleword_and_digits_pair",
         p => compoundLabel(["the name is a single word", `it has ${p.join(" or ")}`]),
@@ -345,28 +360,28 @@
         (name, p) => singleWord(name) && hasAny(name, p)
       ));
 
-      // C) Not starting with letter X AND ends with letter Y
+      // Not starting with letter X AND ends with letter Y
       rules.push(compoundRule(
         "not_starts_X_ends_Y",
         p => compoundLabel([`it does NOT start with “${p.a.toUpperCase()}”`, `it ends with “${p.b.toUpperCase()}”`]),
-        () => shuffle(kCombinations(letters,2)).slice(0,60).map(([a,b]) => ({a,b})),
+        () => shuffle(kCombinations(letters,2)).slice(0,80).map(([a,b]) => ({a,b})),
         (name, p) => !startsWith(name, p.a) && endsWith(name, p.b)
       ));
 
-      // D) Multi-word AND contains bigram “xy”
+      // Multi-word AND contains bigram “xy”
       rules.push(compoundRule(
         "multiword_and_bigram",
         p => compoundLabel(["the name has multiple words", `it contains “${p.bg}”`]),
-        () => bigramsTop.map(bg => ({bg})),
+        () => topBigrams.map(bg => ({bg})),
         (name, p) => hasSpace(name) && name.toLowerCase().includes(p.bg)
       ));
 
-      // E) No symbol subset AND ends with vowel
+      // No symbol pair AND ends with vowel
       const symPairs = kCombinations(SYMBOLS,2);
       rules.push(compoundRule(
         "no_syms_and_ends_vowel",
         p => compoundLabel([`it has NONE of ${p.syms.join(" or ")}`, "it ends with a vowel"]),
-        () => shuffle(symPairs).slice(0,40).map(syms => ({syms})),
+        () => shuffle(symPairs).slice(0,60).map(syms => ({syms})),
         (name, p) => p.syms.every(s => !name.includes(s)) && endsWithVowel(name)
       ));
 
@@ -374,11 +389,11 @@
     }
 
     // ----------------------------
-    // Rule engine & constraints
+    // Rule engine / constraints
     // ----------------------------
     function ruleKey(ruleId, params){
-      const normalized = Array.isArray(params) ? [...params].sort() :
-        (typeof params === "object" && params ? Object.keys(params).sort().reduce((o,k)=> (o[k]=params[k], o), {}) : params);
+      const normalized = Array.isArray(params) ? [...params].sort()
+        : (typeof params === "object" && params ? Object.keys(params).sort().reduce((o,k)=> (o[k]=params[k], o), {}) : params);
       return `${ruleId}::${toKey(normalized)}`;
     }
 
@@ -390,8 +405,8 @@
       return {allowed, banned};
     }
 
-    function meetsGlobalBalance(allowed, banned){
-      return allowed >= MIN_ALLOWED && banned >= MIN_BANNED;
+    function meetsGlobalBalance(allowedCount, bannedCount){
+      return allowedCount >= MIN_ALLOWED && bannedCount >= MIN_BANNED;
     }
 
     function atLeastOneWeaponAllowed(allowedItems){
@@ -400,12 +415,12 @@
     }
 
     // ----------------------------
-    // Rendering (inline banned)
+    // Rendering
     // ----------------------------
     function renderByClass(allItems, allowedSet){
       const container = document.getElementById("byClass");
       container.innerHTML = "";
-      // Build full map of all items by class & category to display all (allowed + banned)
+      // Build map of all items by class & category
       const grouped = {};
       for(const it of allItems){
         grouped[it.buildName] ??= { specialization:[], gadget:[], weapon:[] };
@@ -443,23 +458,35 @@
       B.className = `pill ${b>=MIN_BANNED ? "ok":"bad"}`;
     }
 
-    // ----------------------------
-    // Generator
-    // ----------------------------
-    async function generateRuleAndRender(builds){
-      const items = flattenItems(builds);
+    function setStatus(msg, type=""){
+      const el = document.getElementById("status");
+      el.textContent = msg || "";
+      el.style.color = type==="error" ? "var(--bad)" : (type==="ok" ? "var(--ok)" : "var(--muted)");
+    }
 
+    function renderRule(chosen, params, part, allBuilds){
+      // Update rule text, counts, list, URL, share box
+      document.getElementById("ruleText").textContent = chosen.label(params);
+      const allowedSet = new Set(part.allowed.map(i=>i.id));
+      showCounts(part.allowed.length, part.banned.length);
+      renderByClass(flattenItems(allBuilds), allowedSet);
+      encodeRuleToUrl(chosen.id, params);
+      setStatus("Ready. Share the link to sync this exact rule.", "ok");
+    }
+
+    // ----------------------------
+    // Generation & shared rule loading
+    // ----------------------------
+    async function generateBalancedRule(builds){
+      const items = flattenItems(builds);
       const letterStats = makeLetterStats(items);
       const bigramStats = makeBigramStats(items);
       const ctx = { items, letterStats, bigramStats };
 
       const RULES = [...BASE_RULES, ...buildCompoundRules(ctx)];
-
       const used = loadUsedRules();
       const ruleOrder = shuffle([...RULES]);
-      let chosen = null, chosenParams = null, part = null;
 
-      outer:
       for(let attempts = 0; attempts < MAX_RULE_ATTEMPTS; attempts++){
         const rule = sample(ruleOrder);
         const paramsList = shuffle(rule.genParams(ctx));
@@ -471,46 +498,76 @@
           if(!meetsGlobalBalance(res.allowed.length, res.banned.length)) continue;
           if(REQUIRE_AT_LEAST_ONE_WEAPON && !atLeastOneWeaponAllowed(res.allowed)) continue;
 
-          chosen = rule; chosenParams = p; part = res;
+          // store uniqueness and return
           used.add(key); saveUsedRules(used);
-          break outer;
+          return { rule, params: p, part: res };
         }
       }
+      return null; // none found
+    }
 
-      const ruleText = document.getElementById("ruleText");
-      const cacheInfo = document.getElementById("cacheInfo");
-      cacheInfo.textContent = `Seen rules: ${loadUsedRules().size}`;
-
-      if(!chosen){
-        ruleText.innerHTML = `<span class="error">Couldn’t find a new balanced rule. Try again or “Reset Rules Cache”.</span>`;
-        showCounts(0,0);
-        document.getElementById("byClass").innerHTML = "";
-        return;
-      }
-
-      ruleText.textContent = chosen.label(chosenParams);
-
-      // Build a Set of allowed IDs for inline rendering
-      const allowedSet = new Set(part.allowed.map(i=>i.id));
-      showCounts(part.allowed.length, part.banned.length);
-      renderByClass(items, allowedSet);
+    async function generateFromSharedRule(builds, ruleData){
+      const items = flattenItems(builds);
+      const letterStats = makeLetterStats(items);
+      const bigramStats = makeBigramStats(items);
+      const ctx = { items, letterStats, bigramStats };
+      const RULES = [...BASE_RULES, ...buildCompoundRules(ctx)];
+      const rule = RULES.find(r => r.id === ruleData.id);
+      if(!rule) return null;
+      const res = partition(items, rule.predicate, ruleData.params);
+      if(!meetsGlobalBalance(res.allowed.length, res.banned.length)) return null;
+      if(REQUIRE_AT_LEAST_ONE_WEAPON && !atLeastOneWeaponAllowed(res.allowed)) return null;
+      return { rule, params: ruleData.params, part: res };
     }
 
     // ----------------------------
-    // UI
+    // UI wiring
     // ----------------------------
-    document.getElementById("newRuleBtn").addEventListener("click", async ()=>{
+    const newRuleBtn = document.getElementById("newRuleBtn");
+    const resetCacheBtn = document.getElementById("resetCacheBtn");
+    const copyLinkBtn = document.getElementById("copyLinkBtn");
+    const shareInput = document.getElementById("shareUrl");
+    const cacheInfo = document.getElementById("cacheInfo");
+
+    function setBusy(b){
+      newRuleBtn.disabled = b;
+      resetCacheBtn.disabled = b;
+      copyLinkBtn.disabled = b;
+    }
+
+    document.getElementById("copyLinkBtn").addEventListener("click", async ()=>{
       try{
-        document.getElementById("ruleText").textContent = "Finding a balanced rule…";
-        await generateRuleAndRender(window.__DATA_BUILDS || []);
-      }catch(err){
-        document.getElementById("ruleText").innerHTML = `<span class="error">Error: ${err.message}</span>`;
+        shareInput.select();
+        await navigator.clipboard.writeText(shareInput.value);
+        setStatus("Copied link to clipboard.", "ok");
+      }catch{
+        setStatus("Could not copy. Select and copy manually.", "error");
       }
     });
 
-    document.getElementById("resetCacheBtn").addEventListener("click", ()=>{
+    resetCacheBtn.addEventListener("click", ()=>{
       resetUsedRules();
-      document.getElementById("cacheInfo").textContent = "Seen rules: 0";
+      cacheInfo.textContent = "Seen rules: 0";
+      setStatus("Rule cache cleared. Generate again for fresh options.", "ok");
+    });
+
+    newRuleBtn.addEventListener("click", async ()=>{
+      try{
+        setBusy(true);
+        setStatus("Searching for a fresh, balanced rule…");
+        const builds = window.__DATA_BUILDS || [];
+        const result = await generateBalancedRule(builds);
+        if(!result){
+          setStatus("No new balanced rule found right now. Try Reset Cache or click again.", "error");
+          return;
+        }
+        cacheInfo.textContent = `Seen rules: ${loadUsedRules().size}`;
+        renderRule(result.rule, result.params, result.part, builds);
+      }catch(err){
+        setStatus(`Error: ${err.message}`, "error");
+      }finally{
+        setBusy(false);
+      }
     });
 
     // ----------------------------
@@ -518,12 +575,36 @@
     // ----------------------------
     (async function init(){
       try{
+        setBusy(true);
+        shareInput.value = location.href;
         const data = await fetchData();
         window.__DATA_BUILDS = Array.isArray(data) ? data : [];
-        document.getElementById("ruleText").textContent = "Generating…";
-        await generateRuleAndRender(window.__DATA_BUILDS);
+        cacheInfo.textContent = `Seen rules: ${loadUsedRules().size}`;
+
+        const shared = decodeRuleFromUrl();
+        if(shared){
+          setStatus("Loading shared rule…");
+          const forced = await generateFromSharedRule(window.__DATA_BUILDS, shared);
+          if(forced){
+            renderRule(forced.rule, forced.params, forced.part, window.__DATA_BUILDS);
+            setBusy(false);
+            return;
+          } else {
+            setStatus("Shared rule not valid with current data. Generating a fresh one…");
+          }
+        }
+
+        const result = await generateBalancedRule(window.__DATA_BUILDS);
+        if(!result){
+          setStatus("Couldn’t find a balanced rule. Try Reset Cache and click again.", "error");
+          return;
+        }
+        renderRule(result.rule, result.params, result.part, window.__DATA_BUILDS);
+        cacheInfo.textContent = `Seen rules: ${loadUsedRules().size}`;
       }catch(err){
-        document.getElementById("ruleText").innerHTML = `<span class="error">Failed to load data: ${err.message}</span>`;
+        setStatus(`Failed to load data: ${err.message}`, "error");
+      }finally{
+        setBusy(false);
       }
     })();
   </script>
